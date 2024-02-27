@@ -19,7 +19,7 @@ int main() {
 	cout << v << '\n';
 	
 	//v = v2 + v;
-	v = v - 1;
+	v = v * 12;
 	
 	cout << v << '\n';
 	

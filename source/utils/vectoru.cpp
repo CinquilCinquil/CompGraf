@@ -76,4 +76,21 @@ vectoru<T>& operator-(vectoru<T>& vec_l, T a) {
 	return (vec_l + -a);
 }
 
+template<typename T>
+vectoru<T>& operator*(vectoru<T>& vec_l, T a) {
+	
+	// multiplying the vector by 'a'
+	
+	typename vectoru<T>::iterator it_l = vec_l.begin();
+	
+	while (it_l != vec_l.end()) {
+		
+		*it_l = *it_l * a;
+		
+		it_l ++;
+	}
+	
+	return vec_l;
+}
+
 	
