@@ -16,18 +16,7 @@ int main() {
 	v2.push_back(20);
 	v2.push_back(30);	
 	
-	cout << v << '\n';
-	v += 1;
-	cout << v << '\n';
-	v *= 2;
-	
-	cout << v << '\n';
-	v = v2 + 1;
-	cout << v << '\n';
-	v = v2 * 2;
-	cout << v << '\n';
-	
-	cout << v2 << '\n';
+	cout << (v *= v2) << '\n';
 	
 	//vectoru<int> v3 = (v + v2);
 	

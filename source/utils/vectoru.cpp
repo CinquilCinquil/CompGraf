@@ -139,9 +139,8 @@ vectoru<T>& operator*=(vectoru<T>& vec_l, T a) {
 	return vec_l;
 }
 
-/*
 template<typename T>
-vectoru<T>& operator*(vectoru<T>& vec_l, vectoru<T>& vec_r) {
+vectoru<T>& operator*=(vectoru<T>& vec_l, vectoru<T>& vec_r) {
 	
 	// multiplying vec_l by vec_r
 	
@@ -150,7 +149,7 @@ vectoru<T>& operator*(vectoru<T>& vec_l, vectoru<T>& vec_r) {
 	
 	while (it_l != vec_l.end() && it_r != vec_r.end()) {
 		
-		*it_l = *it_l + *it_r;
+		*it_l = *it_l * (it_r != vec_r.end() ? *it_r : 1);
 		
 		it_l ++;
 		it_r ++;
@@ -158,5 +157,4 @@ vectoru<T>& operator*(vectoru<T>& vec_l, vectoru<T>& vec_r) {
 	
 	return vec_l;
 }
-*/
 	
