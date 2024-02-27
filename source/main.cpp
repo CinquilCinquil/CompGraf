@@ -1,39 +1,20 @@
 #include <iostream>
-#include "utils/vectoru.cpp"
 #include <string>
+#include <Eigen/Dense>
 
 using namespace std;
+using Eigen::MatrixXd;
 
 int main() {
-	
-	vectoru<int> v1;
-	v1.push_back(1);
-	v1.push_back(2);
-	v1.push_back(3);	
-	
-	vectoru<int> v2;
-	v2.push_back(10);
-	v2.push_back(20);
-	v2.push_back(30);
-	
-	vectoru<int> v3;
-	
-	v3 = v1 + v2;
-	cout << v3 << '\n';
-	
-	v3 = v1 * v2;
-	cout << v3 << '\n';
-	
-	v3 = v1 * 5;
-	cout << v3 << '\n';
-	
-	v3 -= 1;
-	cout << v3 << '\n';
-	
-	cout << v1 << '\n';
-	cout << v2 << '\n';
+
+	MatrixXd m(2,2);
+	m(0,0) = 3;
+	m(1,0) = 2.5;
+	m(0,1) = -1;
+	m(1,1) = m(1,0) + m(0,1);
+	std::cout << m << std::endl;
 	
 	cout << "THE END\n";
-	
+
 	return 0;
 }
