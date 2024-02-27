@@ -157,4 +157,14 @@ vectoru<T>& operator*=(vectoru<T>& vec_l, vectoru<T>& vec_r) {
 	
 	return vec_l;
 }
+
+template<typename T>
+vectoru<T> operator*(vectoru<T>& vec_l, vectoru<T>& vec_r) {
 	
+	// multiplying a copy of vec_l by vec_r
+	
+	vectoru<T> v = vec_l;
+	v *= vec_r;
+	
+	return v;
+}

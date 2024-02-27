@@ -14,9 +14,14 @@ int main() {
 	vectoru<int> v2;
 	v2.push_back(10);
 	v2.push_back(20);
-	v2.push_back(30);	
+	v2.push_back(30);
 	
-	cout << (v *= v2) << '\n';
+	vectoru<int> v3 = v * v2;
+	
+	cout << v3 << '\n';
+	
+	cout << v << '\n';
+	cout << v2 << '\n';
 	
 	//vectoru<int> v3 = (v + v2);
 	
