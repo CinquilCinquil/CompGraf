@@ -36,26 +36,48 @@ std::ostream& operator<<(std::ostream& out,  vectoru<T>& vec) {
 // Arithimetical Operations
 
 template<typename T>
-vectoru<T>& operator+(vectoru<T>& vec_l, vectoru<T>& vec_r) {
+vectoru<T> operator+(vectoru<T>& vec_l, vectoru<T>& vec_r) {
 	
-	// adding the contents of vec_r to vec_l
+	// v = vec_l + vec_r
+	// v is the size of vec_l !!!
+	
+	vectoru<T> v;
 	
 	typename vectoru<T>::iterator it_l = vec_l.begin();
 	typename vectoru<T>::iterator it_r = vec_r.begin();
 	
-	while (it_l != vec_l.end() && it_r != vec_r.end()) {
+	while (it_l != vec_l.end()) {
 		
-		*it_l = *it_l + *it_r;
+		v.push_back(*it_l + (it_r != vec_r.end() ? *it_r : 0));
 		
 		it_l ++;
 		it_r ++;
 	}
 	
-	return vec_l;
+	return v;
 }
 
 template<typename T>
-vectoru<T>& operator+(vectoru<T>& vec_l, T a) {
+vectoru<T> operator+(vectoru<T>& vec_l, T a) {
+	
+	// adding 'a' to a copy of the vector
+	
+	vectoru<T> v = vec_l;
+	
+	typename vectoru<T>::iterator it_v = v.begin();
+	
+	while (it_v != v.end()) {
+		
+		*it_v = *it_v + a;
+		
+		it_v ++;
+	}
+	
+	return v;
+}
+
+template<typename T>
+vectoru<T>& operator+=(vectoru<T>& vec_l, T a) {
 	
 	// adding 'a' to the vector
 	
@@ -72,12 +94,36 @@ vectoru<T>& operator+(vectoru<T>& vec_l, T a) {
 }
 
 template<typename T>
-vectoru<T>& operator-(vectoru<T>& vec_l, T a) {
-	return (vec_l + -a);
+vectoru<T> operator-(vectoru<T>& vec_l, T a) {
+	return vec_l + -a;
 }
 
 template<typename T>
-vectoru<T>& operator*(vectoru<T>& vec_l, T a) {
+vectoru<T>& operator-=(vectoru<T>& vec_l, T a) {
+	return vec_l += -a;
+}
+
+template<typename T>
+vectoru<T> operator*(vectoru<T>& vec_l, T a) {
+	
+	// multiplying a copy of the vector by 'a'
+	
+	vectoru<T> v = vec_l;
+	
+	typename vectoru<T>::iterator it_v = v.begin();
+	
+	while (it_v != v.end()) {
+		
+		*it_v = *it_v * a;
+		
+		it_v ++;
+	}
+	
+	return v;
+}
+
+template<typename T>
+vectoru<T>& operator*=(vectoru<T>& vec_l, T a) {
 	
 	// multiplying the vector by 'a'
 	
@@ -93,4 +139,24 @@ vectoru<T>& operator*(vectoru<T>& vec_l, T a) {
 	return vec_l;
 }
 
+/*
+template<typename T>
+vectoru<T>& operator*(vectoru<T>& vec_l, vectoru<T>& vec_r) {
+	
+	// multiplying vec_l by vec_r
+	
+	typename vectoru<T>::iterator it_l = vec_l.begin();
+	typename vectoru<T>::iterator it_r = vec_r.begin();
+	
+	while (it_l != vec_l.end() && it_r != vec_r.end()) {
+		
+		*it_l = *it_l + *it_r;
+		
+		it_l ++;
+		it_r ++;
+	}
+	
+	return vec_l;
+}
+*/
 	
