@@ -54,4 +54,22 @@ vectoru<T>& operator+(vectoru<T>& vec_l, vectoru<T>& vec_r) {
 	return vec_l;
 }
 
+template<typename T>
+vectoru<T>& operator+(vectoru<T>& vec_l, T a) {
+	
+	// adding 'a' to the vector
+	
+	typename vectoru<T>::iterator it_l = vec_l.begin();
+	
+	while (it_l != vec_l.end()) {
+		
+		*it_l = *it_l + a;
+		
+		it_l ++;
+	}
+	
+	return vec_l;
+}
+
+
 	
