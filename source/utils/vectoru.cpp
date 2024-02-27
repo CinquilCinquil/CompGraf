@@ -71,5 +71,9 @@ vectoru<T>& operator+(vectoru<T>& vec_l, T a) {
 	return vec_l;
 }
 
+template<typename T>
+vectoru<T>& operator-(vectoru<T>& vec_l, T a) {
+	return (vec_l + -a);
+}
 
 	
