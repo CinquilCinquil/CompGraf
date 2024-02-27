@@ -6,7 +6,7 @@
 #ifndef VECTOR_OPS_HPP_
 #define VECTOR_OPS_HPP_
 
-	
+
 
 
 #endif
