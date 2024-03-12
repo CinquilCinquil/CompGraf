@@ -17,7 +17,7 @@ struct RGB {
 	
 };
 
-class BackgroundColor {
+class Background {
   private:
     
     RGB corners[4] = {RGB(), RGB(), RGB(), RGB()};
@@ -35,7 +35,7 @@ class BackgroundColor {
 	}
 
   public:
-    BackgroundColor(const vector<RGB>& colors) {
+    Background(const vector<RGB>& colors) {
 		
 		// clock-wise starting at bottom_left
 		for (int i = 0;i < 4;i ++) {
@@ -43,7 +43,7 @@ class BackgroundColor {
 		}
 	}
 	
-    ~BackgroundColor() {};
+    ~Background() {};
 
     RGB sampleUV(float u, float v) const {
 		
@@ -52,26 +52,4 @@ class BackgroundColor {
 		return lerp(b, a, v);
 		
 	}
-	
-	/*
-	vector<RGB> do_coolstuff() {
-	
-		vector<RGB> pixels;
-		
-		byte b = (int) lerp(0, 255, 0.2);
-		
-		for (int i = 0;i < h;i ++) {
-			for (int j = 0;j < w;j ++) {
-				
-				byte g = (int) lerp(255, 0, ((float) i) / h);
-				byte r = (int) lerp(0, 255, ((float) j) / w);
-				
-				pixels.push_back(RGB(r, g, b));
-			}
-		}
-		
-		return pixels;
-	
-	}
-	*/
 };
