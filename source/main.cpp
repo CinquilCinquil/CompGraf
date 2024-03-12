@@ -3,7 +3,7 @@
 #include <fstream>
 #include <vector>
 #include "background.cpp"
-#include "lodepng.cpp"
+#include "../ext/lodepng/lodepng.cpp"
 
 using namespace std;
 using byte = unsigned char;
