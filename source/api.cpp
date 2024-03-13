@@ -10,11 +10,11 @@ namespace CG
 	Film * Api::film;
 
 	void Api::initialize(string filename, int w, int h, vector<RGB> colors) {
-		filename = filename;
-		w = w;
-		h = h;
-		film = new Film(filename, w, h);
-		bkg = new Background(colors);
+		Api::filename = filename;
+		Api::w = w;
+		Api::h = h;
+		Api::film = new Film(filename, w, h);
+		Api::bkg = new Background(colors);
 	}
 
 	void Api::render(){

@@ -16,7 +16,7 @@ namespace CG
 		string filename;
 		vector<RGB> pixels;
 		int w, h;
-		void encodeOneStep(std::vector<unsigned char>& filename, std::vector<unsigned char>& image, unsigned width, unsigned height);
+		void encodeOneStep(const char* filename, std::vector<byte>& image, unsigned width, unsigned height);
 	
 	public:
 		Film(string filename, int w, int h);

@@ -3,7 +3,7 @@
 
 namespace CG
 {
-	void Film::encodeOneStep(std::vector<unsigned char>&  filename, std::vector<unsigned char>& image, unsigned width, unsigned height) {
+	void Film::encodeOneStep(const char* filename, std::vector<byte>& image, unsigned width, unsigned height) {
 		//Encode the image
 		unsigned error = lodepng::encode(filename, image, width, height);
 
@@ -42,6 +42,7 @@ namespace CG
 			}
 			
 			file.close();
+			return;
 		}
 		else 
 		if(file_type == "png")
@@ -52,31 +53,18 @@ namespace CG
 			
 			string filename_with_png = filename + ".png";
 
-			std::vector<unsigned char>* filename_ = new std::vector<unsigned char>();
-			for (char c : filename_with_png) {
-				filename_->push_back(static_cast<unsigned char>(c));
-			}
+			const char* filename_ = (char*) (filename_with_png).c_str();
+			cout << filename_ << "\n";
 
-			std::vector<unsigned char>* bytes = new std::vector<unsigned char>();
+			std::vector<byte>* bytes = new std::vector<byte>();
 			for (int i{0};i < pixels.size();i ++) {
-				bytes->push_back((unsigned char)pixels[i].r);
-				bytes->push_back((unsigned char)pixels[i].g);
-				bytes->push_back((unsigned char)pixels[i].b);
-				bytes->push_back((unsigned char)255);
+				bytes->push_back((byte)pixels[i].r);
+				bytes->push_back((byte)pixels[i].g);
+				bytes->push_back((byte)pixels[i].b);
+				bytes->push_back((byte)255);
 			}
-
-			encodeOneStep(*filename_, *bytes, w, h);
-			
+			encodeOneStep(filename_, *bytes, w, h);			
 		}
 		
 	}
 }
-class Film {
-	
-		
-		
-		
-		
-		
-	
-};
