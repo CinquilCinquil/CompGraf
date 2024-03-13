@@ -1,8 +1,8 @@
 #include <iostream>
-#include "api.cpp"
+#include "api.h"
 
 using namespace std;
-using byte = unsigned char;
+using namespace CG;
 
 int w = 400;
 int h = 200;

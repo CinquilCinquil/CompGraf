@@ -3,7 +3,7 @@
 
 namespace CG
 {
-	void Film::encodeOneStep(std::vector<unsigned char>&  filename, const unsigned char* image, unsigned width, unsigned height) {
+	void Film::encodeOneStep(std::vector<unsigned char>&  filename, std::vector<unsigned char>& image, unsigned width, unsigned height) {
 		//Encode the image
 		unsigned error = lodepng::encode(filename, image, width, height);
 
@@ -51,8 +51,12 @@ namespace CG
 			*/
 			
 			string filename_with_png = filename + ".png";
+
 			std::vector<unsigned char>* filename_ = new std::vector<unsigned char>();
-			filename_.emplace(filename_with_png.begin());
+			for (char c : filename_with_png) {
+				filename_->push_back(static_cast<unsigned char>(c));
+			}
+
 			std::vector<unsigned char>* bytes = new std::vector<unsigned char>();
 			for (int i{0};i < pixels.size();i ++) {
 				bytes->push_back((unsigned char)pixels[i].r);
@@ -61,7 +65,7 @@ namespace CG
 				bytes->push_back((unsigned char)255);
 			}
 
-			encodeOneStep(filename_, bytes, w, h);
+			encodeOneStep(*filename_, *bytes, w, h);
 			
 		}
 		
