@@ -6,6 +6,7 @@
 #include "structures.h"
 #include "background.h"
 #include "film.h"
+#include "running_options.h"
 
 namespace CG 
 {
