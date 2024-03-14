@@ -15,7 +15,7 @@ struct RunningOptions {
 	
 	vector<int> crop_window = {0, 1, 0, 1};
 	string scenefile;
-	string outfile;
+	string outfile = "testes_legais";
 	bool quick;
 	
 	void run(int argc, char *argv[]);

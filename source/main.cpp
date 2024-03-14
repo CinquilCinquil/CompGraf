@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
 	RunningOptions runningOptions;
 	runningOptions.run(argc, argv);
 	
-	Api::initialize("testes_legais", w, h, {RGB(0, 0, 51), RGB(0, 255, 0), RGB(255, 255, 0), RGB(255, 0, 0)});
+	Api::initialize(runningOptions.outfile, w, h, {RGB(0, 0, 51), RGB(0, 255, 0), RGB(255, 255, 0), RGB(255, 0, 0)});
 	
 	Api::render();
 	
