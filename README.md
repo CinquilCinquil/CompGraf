@@ -1,3 +1,3 @@
 # CompGraf
-To compile: ```g++ ext/lodepng/*.cpp source/*.cpp```
+To compile: ```g++ src/*/*.cpp -std=c++17```
 To run: ```./a.exe```
