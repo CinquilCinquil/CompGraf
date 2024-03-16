@@ -1,0 +1,12 @@
+<RT3>
+    <lookat look_from="0 7 0" look_at="0 0 0" up="0 0 1" />
+    <camera type="orthographic" screen_window="-1.7 1.7 -1 1"/>
+    <film type="image" x_res="1920" y_res="1080" crop_window="0.1 0.3 0 1"
+        filename="../images/scene_03.png"
+        img_type="png"  gamma_corrected="yes" />
+
+    <world_begin/>
+        <background type="colors" color="0.7 0.10 0.20" />
+        <!-- Here goes the rest of the file, including scene definition. -->
+    <world_end/>
+</RT3>
