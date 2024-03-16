@@ -90,7 +90,7 @@ private:
   // === Helper functions.
   ///
   static Film *make_film(const string &name, const ParamSet &ps);
-  static Background *make_background(const string &name, const ParamSet &ps);
+  static BackgroundColor *make_background(const string &name, const ParamSet &ps);
   static Camera *make_camera(const string &name, const ParamSet &ps);
 
 public:

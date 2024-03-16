@@ -1,16 +1,29 @@
 #include "film.h"
 #include <cmath>
+#include <fstream>
+#include "../ext/lodepng.h"
 
 #include "api.h"
 #include "image_io.h"
 #include "paramset.h"
 
 namespace rt3 {
+	
+// from lode
+void encodeOneStep(const char* filename, std::vector<byte>& image, unsigned width, unsigned height) {
+	//Encode the image
+	unsigned error = lodepng::encode(filename, image, width, height);
+
+	//if there's an error, display it
+	if(error) std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
+}	
+
 
 //=== Film Method Definitions
 Film::Film(const Point2i& resolution, const std::string& filename, image_type_e imgt)
     : m_full_resolution{ resolution }, m_filename{ filename }, m_image_type{ imgt } {
-  // TODO
+ 
+	//TODO
 }
 
 Film::~Film() = default;
@@ -22,7 +35,59 @@ void Film::add_sample(const Point2f& pixel_coord, const Color24& pixel_color) {
 
 /// Convert image to RGB, compute final pixel values, write image.
 void Film::write_image() const {
-  // TODO: call the proper writing function, either PPM or PNG.
+	
+	std::cout << "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB" << '\n';
+  
+	int w = m_full_resolution[0];
+	int h = m_full_resolution[1];
+	
+	std::cout << "Info: " << w << " " << h << " " << pixels.size() << "\n";
+  
+	if (m_image_type == Film::image_type_e::PPM3)
+	{
+		/*
+			Saving in ppm3
+		*/
+		
+		std::ofstream file(m_filename + ".ppm");
+
+		// Header
+		file << "P3\n";
+		file << std::to_string(w) + " " + std::to_string(h) + "\n";
+		file << "255\n";
+		
+		// Stream of pixels
+		for (Spectrum rgb : pixels) {
+			file << (int) rgb[0] << " ";
+			file << (int) rgb[1] << " ";
+			file << (int) rgb[2] << " ";
+			file << '\n';
+		}
+		
+		file.close();
+		return;
+	}
+	else 
+	if(m_image_type == Film::image_type_e::PNG)
+	{
+		/*
+			Saving in png using the library lodepng
+		*/
+		
+		std::string filename_with_png = m_filename + ".png";
+
+		const char* filename_ = (char*) (filename_with_png).c_str();
+		std::cout << filename_ << "\n";
+
+		std::vector<byte>* bytes = new std::vector<byte>();
+		for (int i{0};i < pixels.size();i ++) {
+			bytes->push_back((byte)pixels[i][0]);
+			bytes->push_back((byte)pixels[i][1]);
+			bytes->push_back((byte)pixels[i][2]);
+			bytes->push_back((byte)255);
+		}
+		encodeOneStep(filename_, *bytes, w, h);			
+	} 
 }
 
 // Factory function pattern.
@@ -70,6 +135,8 @@ Film* create_film(const ParamSet& ps) {
     std::cout << e << " ";
   }
   std::cout << '\n';
+  
+  std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAA" << '\n';
 
   // Note that the image type is fixed here. Must be read from ParamSet, though.
   return new Film(Point2i{ xres, yres }, filename, Film::image_type_e::PNG);

@@ -38,6 +38,7 @@ using Color24 = std::array<uint8_t, 3>;
 using Spectrum = std::array<float, 3>;
 using Normal3f = std::array<float, 3>;
 using Ray = std::array<float, 3>;
+using byte = unsigned char;
 
 // List of points
 using ListPoint3f = std::vector<Point3f>;

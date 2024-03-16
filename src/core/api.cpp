@@ -6,7 +6,23 @@
 
 namespace rt3 {
 
-void render() {}
+void render(std::unique_ptr<Film> & film, std::unique_ptr<BackgroundColor> & background) {
+
+	int w = film->m_full_resolution[0];
+	int h = film->m_full_resolution[1];
+
+	for (int i = 0;i < h;i ++) {
+		for (int j = 0;j < w;j ++) {
+			
+			float u = ((float) j) / w;
+			float v = ((float) i) / h;
+			
+			film->pixels.push_back(background->sampleXY({u, v}));
+		}
+	}
+	
+	film->write_image();
+}
 
 //=== API's static members declaration and initialization.
 API::APIState API::curr_state = APIState::Uninitialized;
@@ -26,9 +42,9 @@ Film* API::make_film(const std::string& name, const ParamSet& ps) {
   return film;
 }
 
-Background* API::make_background(const std::string& name, const ParamSet& ps) {
+BackgroundColor* API::make_background(const std::string& name, const ParamSet& ps) {
   std::cout << ">>> Inside API::background()\n";
-  Background* bkg{ nullptr };
+  BackgroundColor* bkg{ nullptr };
   bkg = create_color_background(ps);
 
   // Return the newly created background.
@@ -81,13 +97,14 @@ void API::world_begin() {
 }
 
 void API::world_end() {
+	
   VERIFY_WORLD_BLOCK("API::world_end");
   // The scene has been properly set up and the scene has
   // already been parsed. It's time to render the scene.
 
   // At this point, we have the background as a solitary pointer here.
   // In the future, the background will be parte of the scene object.
-  std::unique_ptr<Background> the_background{ make_background(render_opt->bkg_type,
+  std::unique_ptr<BackgroundColor> the_background{ make_background(render_opt->bkg_type,
                                                               render_opt->bkg_ps) };
   // Same with the film, that later on will belong to a camera object.
   std::unique_ptr<Film> the_film{ make_film(render_opt->film_type, render_opt->film_ps) };
@@ -104,10 +121,14 @@ void API::world_end() {
     RT3_MESSAGE("    Image dimensions in pixels (W x H): " + std::to_string(w) + " x "
                 + std::to_string(h) + ".\n");
     RT3_MESSAGE("    Ray tracing is usually a slow process, please be patient: \n");
+	
+	std::cout << "BLUBBLUBBLUBBLUBBLUBBLUBBLUB" << '\n';
 
     //================================================================================
     auto start = std::chrono::steady_clock::now();
-    render();  // TODO: This is the ray tracer's  main loop.
+	
+    render(the_film, the_background);  // TODO: This is the ray tracer's  main loop.
+	
     auto end = std::chrono::steady_clock::now();
     //================================================================================
     auto diff = end - start;  // Store the time difference between start and end

@@ -7,6 +7,7 @@
 namespace rt3 {
 // TODO: Create a virtual class Background and derive BackgroundColor,
 // BackgroundSphereImage, BackgroundSkyBoxImage.
+
 /*!
  * A background is basically a rectangle, have a color associated to each
  * corner. A background might be sampled based on a normalized coordinate in
@@ -30,13 +31,12 @@ public:
   Background(mapping_t mt = mapping_t::spherical) : mapping_type{ mt } { /* empty */ }
 
   virtual ~Background(){ /* empty */ };
-  [[nodiscard]] Spectrum sampleXYZ(const Point2f& pixel_ndc) const;
 };
 
 class BackgroundColor : public Background {
 private:
   /// Each corner has a color associated with.
-  // Spectrum corners[4] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+  Spectrum corners[4] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
   /// Corner indices.
   enum Corners_e {
     bl = 0,  //!< Bottom left corner.
@@ -47,14 +47,23 @@ private:
 
 public:
   /// Ctro receives a list of four colors, for each corner.
-  BackgroundColor() {
-    // TODO
+  
+  BackgroundColor(const vector<Spectrum>& colors) {
+    // clock-wise starting at bottom_left
+	for (int i = 0;i < 4;i ++) {
+		corners[i] = colors[i];
+	}
   }
+  
+  Spectrum lerp(const Spectrum &A, const Spectrum &B, float t) const;
+	
+  [[nodiscard]] Spectrum sampleXY(const Point2f& pixel_ndc) const;
 
   virtual ~BackgroundColor(){};
 };
 
 // factory pattern functions.
 BackgroundColor* create_color_background(const ParamSet& ps);
+
 }  // namespace rt3
 #endif
