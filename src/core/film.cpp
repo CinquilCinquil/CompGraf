@@ -1,11 +1,4 @@
 #include "film.h"
-#include <cmath>
-#include <fstream>
-#include "../ext/lodepng.h"
-
-#include "api.h"
-#include "image_io.h"
-#include "paramset.h"
 
 namespace rt3 {
 	
@@ -29,14 +22,17 @@ Film::Film(const Point2i& resolution, const std::string& filename, image_type_e 
 Film::~Film() = default;
 
 /// Add the color to image.
-void Film::add_sample(const Point2f& pixel_coord, const Color24& pixel_color) {
-  // TODO: add color to the proper location.
+void Film::add_sample(const Point2f& pixel_coord, const Spectrum& pixel_color) {
+	size_t idx = pixel_coord[0]*m_full_resolution[0] + pixel_coord[1]; 
+	
+	pixels[idx][0] = (float)pixel_color[0];
+	pixels[idx][1] = (float)pixel_color[1];
+	pixels[idx][2] = (float)pixel_color[2];
 }
 
 /// Convert image to RGB, compute final pixel values, write image.
 void Film::write_image() const {
 	
-	std::cout << "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB" << '\n';
   
 	int w = m_full_resolution[0];
 	int h = m_full_resolution[1];
@@ -127,7 +123,7 @@ Film* create_film(const ParamSet& ps) {
     yres = std::max(1, yres / 4);
   }
 
-  // TODO
+  // 
   // Read crop window information.
   std::vector<real_type> cw = retrieve(ps, "crop_window", std::vector<real_type>{ 0, 1, 0, 1 });
   std::cout << "Crop window ";
@@ -136,8 +132,6 @@ Film* create_film(const ParamSet& ps) {
   }
   std::cout << '\n';
   
-  std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAA" << '\n';
-
   // Note that the image type is fixed here. Must be read from ParamSet, though.
   return new Film(Point2i{ xres, yres }, filename, Film::image_type_e::PNG);
 }
