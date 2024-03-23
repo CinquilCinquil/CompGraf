@@ -8,19 +8,20 @@
 # include <iostream>
 # include <memory>
 # include <vector>
-using std::vector;
 # include <array>
-using std::array;
 # include <map>
 # include <stack>
 # include <string>
 
 # include <unordered_map>
-using std::string;
 # include <algorithm>
 # include <tuple>
-using std::tuple;
 # include <utility>
+
+using std::array;
+using std::vector;
+using std::tuple;
+using std::string;
 
 //== Alias to the chosen data structure to implement a dictionary.
 // #define Dictionary std::unordered_map

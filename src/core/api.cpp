@@ -1,5 +1,4 @@
 #include "api.h"
-#include "background.h"
 
 #include <chrono>
 #include <memory>

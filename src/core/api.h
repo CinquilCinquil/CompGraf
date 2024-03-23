@@ -3,8 +3,7 @@
 
 #include <string>
 
-#include "paramset.h"
-#include "rt3.h"
+#include "rt3-base.h"
 
 //=== API Macro definitions
 

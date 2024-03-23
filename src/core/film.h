@@ -1,15 +1,11 @@
 #ifndef FILM_H
 #define FILM_H
 
-#include "error.h"
-#include "paramset.h"
-#include "rt3.h"
 #include <cmath>
 #include <fstream>
-#include "../ext/lodepng.h"
 
+#include "rt3-base.h"
 #include "api.h"
-#include "image_io.h"
 
 namespace rt3 {
 

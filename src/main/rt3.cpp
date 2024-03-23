@@ -1,14 +1,13 @@
 #include <fstream>
 #include <iostream>  // std::cout, std::cerr
-using std::ifstream;
 #include <sstream>
-using std::ostringstream;
 #include <string>
-using std::string;
 
 #include "../core/api.h"
-#include "../core/error.h"
-#include "../core/rt3.h"
+
+using std::ifstream;
+using std::ostringstream;
+using std::string;
 
 using namespace rt3;
 
