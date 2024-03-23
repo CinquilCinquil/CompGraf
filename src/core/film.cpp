@@ -9,6 +9,13 @@ Film::Film(const Point2i& resolution, const std::string& filename, image_type_e 
 	//TODO
 }
 
+//=== Film Method Definitions
+Film::Film(const Point2i& resolution, const Point2i& p1, const Point2i& p2, const std::string& filename, image_type_e imgt)
+    : m_full_resolution{resolution}, 
+	m_initial_points{p1}, m_final_points{p2},
+	m_filename{ filename }, m_image_type{ imgt } {
+}
+
 Film::~Film() = default;
 
 /// Add the color to image.
@@ -23,8 +30,8 @@ void Film::add_sample(const Point2f& pixel_coord, const Spectrum& pixel_color) {
 /// Convert image to RGB, compute final pixel values, write image.
 void Film::write_image() const {
 	
-	size_t w = m_full_resolution[0];
-	size_t h = m_full_resolution[1];
+	size_t w = m_final_points[0] - m_initial_points[0];
+	size_t h = m_final_points[1] - m_initial_points[1];
 
 	if (m_image_type == Film::image_type_e::PPM3)
 	{
@@ -75,11 +82,19 @@ Film* create_film(const ParamSet& ps) {
   // 
   // Read crop window information.
   std::vector<real_type> cw = retrieve(ps, "crop_window", std::vector<real_type>{ 0, 1, 0, 1 });
+
   std::cout << "Crop window ";
   for (const auto& e : cw) {
     std::cout << e << " ";
   }
   std::cout << '\n';
+
+  // crop window logic
+
+  Point2i p1 = {(int) (xres * cw[0]), (int) (yres * cw[2])};
+  Point2i p2 = {(int) (xres * cw[1]), (int) (yres * cw[3])};
+
+  std::cout << "AAAAAAAAAAAAA" << p1 << " " << p2 << '\n';
   
   // determing image type
 
@@ -92,6 +107,6 @@ Film* create_film(const ParamSet& ps) {
 
   //
 
-  return new Film(Point2i{ xres, yres }, filename, img_type);
+  return new Film(Point2i{xres, yres}, p1, p2, filename, img_type);
 }
 }  // namespace rt3

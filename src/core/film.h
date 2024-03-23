@@ -17,6 +17,9 @@ public:
 
   //=== Film Public Methods
   Film(const Point2i& resolution, const std::string& filename, image_type_e imgt);
+
+  Film(const Point2i& resolution, const Point2i& p1, const Point2i& p2, const std::string& filename, image_type_e imgt);
+
   virtual ~Film();
 
   /// Retrieve original Film resolution.
@@ -27,6 +30,8 @@ public:
 
   //=== Film Public Data
   const Point2i m_full_resolution;  //!< The image's full resolution values.
+  const Point2i m_initial_points{0, 0};  //!< Top-Left points of the image
+  const Point2i m_final_points{0, 0};  //!< Bottom-Right points of the image
   std::string m_filename;           //!< Full path file name + extension.
   image_type_e m_image_type;        //!< Image type, PNG, PPM3, PPM6.
   vector<Spectrum> pixels;

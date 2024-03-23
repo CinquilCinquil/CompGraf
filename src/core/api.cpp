@@ -7,11 +7,17 @@ namespace rt3 {
 
 void render(std::unique_ptr<Film> & film, std::unique_ptr<BackgroundColor> & background) {
 
-	int w = film->m_full_resolution[0];
+  int wi = film->m_initial_points[0];
+	int hi = film->m_initial_points[1];
+  
+	int wf = film->m_final_points[0];
+	int hf = film->m_final_points[1];
+
+  int w = film->m_full_resolution[0];
 	int h = film->m_full_resolution[1];
 
-	for (int i = 0;i < h;i ++) {
-		for (int j = 0;j < w;j ++) {
+	for (int i = hi;i < hf;i ++) {
+		for (int j = wi;j < wf;j ++) {
 			
 			float u = ((float) j) / w;
 			float v = ((float) i) / h;

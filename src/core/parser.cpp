@@ -110,7 +110,7 @@ void parse_tags(tinyxml2::XMLElement* p_element, int level) {
         { param_type_e::STRING, "img_type" },
         { param_type_e::INT, "x_res" },
         { param_type_e::INT, "y_res" },
-        { param_type_e::ARR_REAL, "crop_window" },
+        { param_type_e::ARR_REAL, "crop_window" },  
         { param_type_e::STRING, "gamma_corrected" }  // bool
       };
       parse_parameters(p_element, param_list, /* out */ &ps);
