@@ -18,6 +18,12 @@
 # include <tuple>
 # include <utility>
 
+#include "../ext/glm/glm.hpp"
+#include "../ext/glm/ext/vector_float3.hpp"
+#include "../ext/glm/ext/vector_int3.hpp"
+
+# define GLM_FORCE_LEFT_HANDED
+
 using std::array;
 using std::vector;
 using std::tuple;
@@ -29,26 +35,35 @@ using std::string;
 
 //=== Aliases
 namespace rt3 {
-/// ATENTION: This is just to compile the project. You need to implement
-/// Point3f!!!!
-// Alias to a Point3f (simulation)
-using Point3f = std::array<float, 3>;
-// Temporary Vec3, just to compile. TODO: Implement a real one!!!
-using Vector3f = std::array<float, 3>;
-using Color24 = std::array<uint8_t, 3>;
-using Spectrum = std::array<float, 3>;
-using Normal3f = std::array<float, 3>;
-using Ray = std::array<float, 3>;
+
 using byte = unsigned char;
+
+// Points
+using Point2i = std::array<int, 2>;
+using Point2f = std::array<float, 2>;
+using Point3i = std::array<int, 3>;
+using Point3f = std::array<float, 3>; // !!
 
 // List of points
 using ListPoint3f = std::vector<Point3f>;
 
-// Temporary Vec3i. TODO: code a real one.
-using Vector3i = std::array<int, 3>;
-using Point3i = std::array<int, 3>;
-using Point2i = std::array<int, 2>;
-using Point2f = std::array<float, 2>;
+// Vectors
+using Vector3f = std::array<float, 3>;// !!
+using Vector3i = std::array<int, 3>; // !!
+
+// Colors
+using Color24 = std::array<uint8_t, 3>;
+using Spectrum = std::array<float, 3>;
+using RGB = std::array<byte, 3>;
+
+// Others
+using Ray = std::array<float, 3>;
+using Normal3f = std::array<float, 3>; // eu não sei oq é isso :p
+
+// glm::vec3
+// glm::ivec3
+
+//
 
 template <typename T, size_t S>
 std::ostream& operator<<(std::ostream& os, const std::array<T, S>& v) {
