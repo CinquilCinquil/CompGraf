@@ -81,7 +81,14 @@ Film* create_film(const ParamSet& ps) {
 
   // 
   // Read crop window information.
-  std::vector<real_type> cw = retrieve(ps, "crop_window", std::vector<real_type>{ 0, 1, 0, 1 });
+  std::vector<real_type> cw;
+  if (API::curr_run_opt.croped_window) {
+	cw = {API::curr_run_opt.crop_window[0][0], API::curr_run_opt.crop_window[0][1],
+		API::curr_run_opt.crop_window[1][0], API::curr_run_opt.crop_window[1][1]};
+  }
+  else {
+	cw = retrieve(ps, "crop_window", std::vector<real_type>{ 0, 1, 0, 1 });
+  }
 
   std::cout << "Crop window ";
   for (const auto& e : cw) {
@@ -93,8 +100,6 @@ Film* create_film(const ParamSet& ps) {
 
   Point2i p1 = {(int) (xres * cw[0]), (int) (yres * cw[2])};
   Point2i p2 = {(int) (xres * cw[1]), (int) (yres * cw[3])};
-
-  std::cout << "AAAAAAAAAAAAA" << p1 << " " << p2 << '\n';
   
   // determing image type
 

@@ -46,6 +46,7 @@ RunningOptions cli_parser(int argc, char* argv[]) {
         usage("missing value after --cropwindow argument");
       }
       // Get crop values.
+      opt.croped_window = true;
       opt.crop_window[0][0] = std::stof(argv[++i]);
       opt.crop_window[0][1] = std::stof(argv[++i]);
       opt.crop_window[1][0] = std::stof(argv[++i]);

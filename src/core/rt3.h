@@ -101,6 +101,7 @@ struct RunningOptions {
   // [row=0] -> X; [row=1] -> Y
   // x0, x1, y0, y1
   Array2d<real_type, 2, 2> crop_window{ { { 0, 1 }, { 0, 1 } } };  //!< Crop window to render.
+  bool croped_window = false;
   std::string filename;                                            //!< input scene file name.
   std::string outfile;                                             //!< output image file name.
   bool quick_render{ false };  //!< if true render image with 1/4 of the
