@@ -81,7 +81,17 @@ Film* create_film(const ParamSet& ps) {
   }
   std::cout << '\n';
   
-  // Note that the image type is fixed here. Must be read from ParamSet, though.
-  return new Film(Point2i{ xres, yres }, filename, Film::image_type_e::PNG);
+  // determing image type
+
+  std::string img_type_str = retrieve(ps, "img_type", std::string{ "" });
+
+  Film::image_type_e img_type;
+  if (img_type_str == "ppm3") img_type = Film::image_type_e::PPM3;
+  if (img_type_str == "ppm6") img_type = Film::image_type_e::PPM6;
+  if (img_type_str == "png") img_type = Film::image_type_e::PNG;
+
+  //
+
+  return new Film(Point2i{ xres, yres }, filename, img_type);
 }
 }  // namespace rt3
