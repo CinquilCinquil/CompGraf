@@ -57,7 +57,6 @@ using Spectrum = std::array<float, 3>;
 using RGB = std::array<byte, 3>;
 
 // Others
-using Ray = std::array<float, 3>;
 using Normal3f = std::array<float, 3>; // eu não sei oq é isso :p
 
 // glm::vec3
