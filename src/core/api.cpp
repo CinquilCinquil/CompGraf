@@ -120,8 +120,6 @@ void API::world_end() {
     RT3_MESSAGE("    Image dimensions in pixels (W x H): " + std::to_string(w) + " x "
                 + std::to_string(h) + ".\n");
     RT3_MESSAGE("    Ray tracing is usually a slow process, please be patient: \n");
-	
-	std::cout << "BLUBBLUBBLUBBLUBBLUBBLUBBLUB" << '\n';
 
     //================================================================================
     auto start = std::chrono::steady_clock::now();

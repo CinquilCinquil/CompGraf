@@ -49,9 +49,7 @@ public:
   
   BackgroundColor(const vector<Spectrum>& colors) {
     // clock-wise starting at bottom_left
-	for (int i = 0;i < 4;i ++) {
-		corners[i] = colors[i];
-	}
+    for (int i = 0;i < 4;i ++) {corners[i] = colors[i];}
   }
   
   Spectrum lerp(const Spectrum &A, const Spectrum &B, float t) const;

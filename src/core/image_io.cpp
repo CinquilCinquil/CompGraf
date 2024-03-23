@@ -60,6 +60,49 @@ bool save_ppm3(unsigned char* data, size_t w, size_t h, size_t d, const std::str
   return result;
 }
 
+/// Saves an image as a **ascii** PPM file.
+void save_ppm3(std::vector<Spectrum> data, size_t w, size_t h, const std::string& file_name_) {
+  std::ofstream file(file_name_ + ".ppm");
+
+		// Header
+		file << "P3\n";
+		file << w << " " << h << "\n";
+		file << "255\n";
+		
+		// Stream of pixels
+		for (Spectrum rgb : data) {
+			file << (int) rgb[0] << " ";
+			file << (int) rgb[1] << " ";
+			file << (int) rgb[2] << " ";
+			file << '\n';
+		}
+		
+		file.close();
+}
+
+void save_png(std::vector<Spectrum> data, size_t w, size_t h, const std::string& file_name_) {
+
+  std::string filename_with_png = file_name_ + ".png";
+
+		const char* filename_ = (char*) (filename_with_png).c_str();
+		std::cout << filename_ << "\n";
+
+		std::vector<byte> bytes;
+
+		for (int i{0};i < data.size();i ++) {
+			bytes.push_back((byte)data[i][0]);
+			bytes.push_back((byte)data[i][1]);
+			bytes.push_back((byte)data[i][2]);
+			bytes.push_back((byte)255);
+		}
+
+		//Encode the image
+    unsigned error = lodepng::encode(filename_, (std::vector<byte> &) bytes, w, h);
+
+    //if there's an error, display it
+    if(error) std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
+}
+
 bool save_png(unsigned char* data, size_t w, size_t h, size_t d, const std::string& file_name_) {
 #define LODEPNG
 #ifdef LODEPNG

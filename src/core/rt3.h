@@ -116,7 +116,7 @@ struct RunningOptions {
  * \return The interpolated value.
  */
 //
-inline float Lerp(float t, float v1, float v2) { return (1.F - t) * v1 + t * v2; }
+inline float Lerp(float v1, float v2, float t) { return (1 - t)*v1 + t*v2; }
 
 /// Clamp T to [low,high].
 template <typename T, typename U, typename V> inline T Clamp(T val, U low, V high) {
