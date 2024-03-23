@@ -56,7 +56,7 @@ public:
   
   Spectrum lerp(const Spectrum &A, const Spectrum &B, float t) const;
 	
-  [[nodiscard]] Spectrum sampleXY(const Point2f& pixel_ndc) const;
+  [[nodiscard]] Spectrum sampleUV(const Point2f& pixel_ndc) const;
 
   virtual ~BackgroundColor(){};
 };

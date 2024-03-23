@@ -16,7 +16,7 @@ void render(std::unique_ptr<Film> & film, std::unique_ptr<BackgroundColor> & bac
 			float u = ((float) j) / w;
 			float v = ((float) i) / h;
 			
-			film->pixels.push_back(background->sampleXY({u, v}));
+			film->pixels.push_back(background->sampleUV({u, v}));
 		}
 	}
 	
