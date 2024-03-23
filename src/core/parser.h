@@ -7,36 +7,37 @@
  */
 
 #include <iostream>
-#include "../ext/tinyxml2.h"
+#include <iomanip>
+#include <string>
+#include <memory>
+#include <algorithm>
+#include <sstream>
+#include <iterator>
+#include <vector>
+#include <utility>
+#include <optional>
+
 using std::boolalpha;
 using std::cerr;
 using std::clog;
 using std::cout;
 using std::endl;
-#include <iomanip>
 using std::setw;
-#include <string>
 using std::string;
-#include <memory>
 using std::make_shared;
 using std::make_unique;
 using std::shared_ptr;
 using std::unique_ptr;
-#include <algorithm>
 using std::copy;
-#include <sstream>
 using std::stringstream;
-#include <iterator>
 using std::begin;
 using std::endl;
 using std::istream_iterator;
-#include <vector>
 using std::vector;
-#include <utility>
 using std::pair;
-#include <optional>
 using std::optional;
 
+#include "../ext/tinyxml2.h"
 #include "error.h"
 #include "paramset.h"
 
