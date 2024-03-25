@@ -43,6 +43,7 @@ using Point2i = std::array<int, 2>;
 using Point2f = std::array<float, 2>;
 using Point3i = std::array<int, 3>;
 using Point3f = std::array<float, 3>; // !!
+using point3 = glm::vec3; // Perigo
 
 // List of points
 using ListPoint3f = std::vector<Point3f>;
@@ -50,6 +51,7 @@ using ListPoint3f = std::vector<Point3f>;
 // Vectors
 using Vector3f = std::array<float, 3>;// !!
 using Vector3i = std::array<int, 3>; // !!
+using vec3 = glm::vec3; // Perigo
 
 // Colors
 using Color24 = std::array<uint8_t, 3>;
