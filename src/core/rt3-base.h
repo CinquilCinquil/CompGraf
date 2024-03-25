@@ -15,8 +15,8 @@
 #include "parser.h"
 
 // RT objects
-#include "camera.h"
 #include "ray.h"
+#include "camera.h"
 #include "background.h"
 #include "film.h"
 

@@ -6,13 +6,17 @@
 namespace rt3 {
 
 class Camera{
-private:
+protected:
 	point3 frame_pos = {0, 0, 0};
 	std::array<vec3, 3> frame_vecs = {vec3(), vec3(), vec3()};
 	vec3 vup = {0, 1, 0};
+	float l, r, b, t;
+	int nx, ny;
+
+	std::array<float, 2> xy_to_uv(int x, int y); // converts pixel coords to screen-space coords
 
 public:
-	Camera(point3 frame_pos, vec3 look_from, vec3 look_at);
+	Camera(Point2i size, point3 frame_pos, vec3 look_from, vec3 look_at);
 
     virtual Ray generate_ray(int x, int y) = 0;
 };
