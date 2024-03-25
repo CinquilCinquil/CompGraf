@@ -12,14 +12,7 @@ private:
 	vec3 vup = {0, 1, 0};
 
 public:
-	Camera(point3 frame_pos, vec3 look_from, vec3 look_at) : frame_pos{frame_pos} {
-		vec3 gaze = look_at - look_from;
-		vec3 w = normalize(gaze);
-		vec3 u = normalize(cross(vup, w));
-		vec3 v = normalize(cross(w, u));
-
-		frame_vecs = {u, v, w};
-	}
+	Camera(point3 frame_pos, vec3 look_from, vec3 look_at);
 
     virtual Ray generate_ray(int x, int y) = 0;
 };
