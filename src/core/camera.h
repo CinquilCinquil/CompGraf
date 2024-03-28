@@ -2,6 +2,7 @@
 #define CAMERA_H
 
 #include "rt3-base.h"
+#include "ray.h"
 
 namespace rt3 {
 

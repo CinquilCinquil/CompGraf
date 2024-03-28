@@ -33,10 +33,14 @@ using std::string;
 // #define Dictionary std::unordered_map
 # define Dictionary std::map
 
-//=== Aliases
-namespace rt3 {
 
+namespace rt3 {
+  
+//=== Aliases
 using byte = unsigned char;
+using real_type = float;
+using size_type = size_t;
+using result_type = std::tuple<bool, std::string>;
 
 // Points
 using Point2i = std::array<int, 2>;
@@ -83,11 +87,6 @@ class BackgroundColor;
 class Camera;
 
 //float M_PI = 3.14159265359;
-
-//=== aliases
-using real_type = float;
-using size_type = size_t;
-using result_type = std::tuple<bool, std::string>;
 
 /// This struct holds information provided via command line arguments
 struct RunningOptions {
