@@ -5,28 +5,43 @@
 
 namespace rt3 {
 
-void render(std::unique_ptr<Film> & film, std::unique_ptr<BackgroundColor> & background) {
+void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> & background) {
 
-  int wi = film->m_initial_points[0];
-	int hi = film->m_initial_points[1];
+  int wi = camera->film->m_initial_points[0];
+	int hi = camera->film->m_initial_points[1];
   
-	int wf = film->m_final_points[0];
-	int hf = film->m_final_points[1];
+	int wf = camera->film->m_final_points[0];
+	int hf = camera->film->m_final_points[1];
 
-  int w = film->m_full_resolution[0];
-	int h = film->m_full_resolution[1];
+  int w = camera->film->m_full_resolution[0];
+	int h = camera->film->m_full_resolution[1];
 
-	for (int i = hi;i < hf;i ++) {
+  for (int i = hi;i < hf; i++) {
+		for (int j = wi;j < wf; j++) {
+        Ray r1 = camera->generate_ray( i, j );
+        // Generate ray with the Shirley method.
+
+        // Print out the two rays, that must be the same (regardless of the method).
+        //std::cout << "Ray1: " << r1 << std::endl;
+        //std::cout << "Point at t=', ray('2') = " << r1(2.f) << std::endl;
+
+        // Rays are not hitting the scene just yet; so let us sample the background.
+        float u = ((float) j) / w;
+			  float v = ((float) i) / h;
+        //auto color = background->sampleUV(  rt3::Point2f{float(i)/float(w), float(j)/float(h)} ); // get background color.
+        camera->film->pixels.push_back(background->sampleUV({u, v})); // set image buffer at position (i,j), accordingly.
+    }
+  }
+	/*for (int i = hi;i < hf;i ++) {
 		for (int j = wi;j < wf;j ++) {
 			
-			float u = ((float) j) / w;
-			float v = ((float) i) / h;
 			
-			film->pixels.push_back(background->sampleUV({u, v}));
+			
+			camera->film->pixels.push_back(background->sampleUV({u, v}));
 		}
-	}
+	}*/
 	
-	film->write_image();
+	camera->film->write_image();
 }
 
 //=== API's static members declaration and initialization.
@@ -37,6 +52,15 @@ std::unique_ptr<RenderOptions> API::render_opt;
 
 // THESE FUNCTIONS ARE NEEDED ONLY IN THIS SOURCE FILE (NO HEADER NECESSARY)
 // ˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇ
+
+Camera* API::make_camera(const std::string& name, const ParamSet& ps) {
+  std::cout << ">>> Inside API::make_camera()\n";
+  Camera* cam{ nullptr };
+  cam = create_camera(ps);
+
+  return cam;
+}
+
 
 Film* API::make_film(const std::string& name, const ParamSet& ps) {
   std::cout << ">>> Inside API::make_film()\n";
@@ -112,15 +136,16 @@ void API::world_end() {
   std::unique_ptr<BackgroundColor> the_background{ make_background(render_opt->bkg_type,
                                                               render_opt->bkg_ps) };
   // Same with the film, that later on will belong to a camera object.
-  std::unique_ptr<Film> the_film{ make_film(render_opt->film_type, render_opt->film_ps) };
+  std::unique_ptr<Camera> the_camera{ make_camera (render_opt->camera_type, render_opt-> camera_ps) };
+  the_camera->film = make_film(render_opt->film_type, render_opt->film_ps) ;
 
   // Run only if we got film and background.
-  if (the_film and the_background) {
+  if (the_camera and the_background) {
     RT3_MESSAGE("    Parsing scene successfuly done!\n");
     RT3_MESSAGE("[2] Starting ray tracing progress.\n");
 
     // Structure biding, c++17.
-    auto res = the_film->get_resolution();
+    auto res = the_camera->film->get_resolution();
     size_t w = res[0];
     size_t h = res[1];
     RT3_MESSAGE("    Image dimensions in pixels (W x H): " + std::to_string(w) + " x "
@@ -130,7 +155,7 @@ void API::world_end() {
     //================================================================================
     auto start = std::chrono::steady_clock::now();
 	
-    render(the_film, the_background);  // TODO: This is the ray tracer's  main loop.
+    render(the_camera, the_background);  // TODO: This is the ray tracer's  main loop.
 	
     auto end = std::chrono::steady_clock::now();
     //================================================================================

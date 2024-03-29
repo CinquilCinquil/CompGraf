@@ -73,7 +73,7 @@ void parse_tags(tinyxml2::XMLElement* p_element, int level) {
         { param_type_e::POINT3F, "look_from" },
         { param_type_e::POINT3F, "look_at" },
         { param_type_e::VEC3F, "up" },
-        { param_type_e::ARR_REAL, "vpdim" },  // The viewport dimensions defined by the scene
+        { param_type_e::POINT2I, "vpdim" },  // The viewport dimensions defined by the scene
         // Legacy parameters ENDS.
         { param_type_e::REAL, "fovy" },
         { param_type_e::REAL, "focal_distance" },

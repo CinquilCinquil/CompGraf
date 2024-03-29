@@ -2,7 +2,7 @@
 
 namespace rt3 {
 
-Camera::Camera(Point2i size, point3 frame_pos, vec3 look_from, vec3 look_at) : frame_pos{frame_pos} {
+Camera::Camera(Point2i& size, point3& frame_pos, vec3& look_from, vec3& look_at) : frame_pos{look_from} {
 
     // Defining left, right, top and bottom bounds
     float screen_proportion = size[0]/size[1];
@@ -43,6 +43,29 @@ Ray OrthographicCamera::generate_ray(int x, int y) {
     float v = uv[1];
 
     return Ray(frame_pos + u*frame_vecs[0] + v*frame_vecs[1], frame_vecs[2]);
+}
+
+Camera* create_camera(const ParamSet& ps) {
+  std::cout << ">>> Inside create_camera()\n";
+  
+  vec3 lfr = retrieve(ps, "look_from", vec3{ 0, 0, 0 }); /// look down
+  vec3 lat = retrieve(ps, "look_at", vec3{ 1, 0, 0 });
+
+  point3 pos = retrieve(ps, "look_from", point3{ 0, 0, 0 }); // here... ????????
+
+  Point2i size = retrieve(ps, "vpdim", Point2i{16, 9});
+
+  std::string cam_type = retrieve<std::string>(ps, "type", string{ "" });
+  
+  if(cam_type == "orthographic")
+  {
+    return new OrthographicCamera(size, pos, lfr, lat);
+  }
+  else
+  {
+    return new PerspectiveCamera(size, pos, lfr, lat);
+  }
+  
 }
 
 }

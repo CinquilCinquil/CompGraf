@@ -17,17 +17,25 @@ protected:
 	std::array<float, 2> xy_to_uv(int x, int y); // converts pixel coords to screen-space coords
 
 public:
-	Camera(Point2i size, point3 frame_pos, vec3 look_from, vec3 look_at);
+
+	Film* film;
+
+	Camera(Point2i& size, point3& frame_pos, vec3& look_from, vec3& look_at);
 
     virtual Ray generate_ray(int x, int y) = 0;
+
 };
 class PerspectiveCamera : public Camera {
+	using Camera::Camera;
 	Ray generate_ray(int x, int y);
 };
 class OrthographicCamera : public Camera {
+	using Camera::Camera;
 	Ray generate_ray(int x, int y);
 };
 
+// Factory pattern. It's not part of these classes.
+Camera* create_camera(const ParamSet& ps);
 
 }
 
