@@ -46,7 +46,7 @@ using result_type = std::tuple<bool, std::string>;
 using Point2i = std::array<int, 2>;
 using Point2f = std::array<float, 2>;
 using Point3i = std::array<int, 3>;
-using Point3f = std::array<float, 3>; // !!
+using Point3f = std::array<float, 3>; // !! // TODO: FIX PARSER AND USE ONLY ONE point3 and vec3
 using point3 = glm::vec3; // Perigo
 
 // List of points
