@@ -19,7 +19,7 @@
 #include "camera.h"
 #include "background.h"
 #include "film.h"
-#include "primitive.h"
 #include "surfel.h"
+#include "primitive.h"
 
 #endif  // RT3-BASE_H

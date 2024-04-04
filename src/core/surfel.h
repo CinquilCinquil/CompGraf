@@ -2,12 +2,12 @@
 
 namespace rt3 {
 
-class Surfel{
+class Surfel {
 	public:
 		Surfel( const point3&p,const vec3&n, const vec3&wo, float time,
 			const Point2f& uv, const Primitive *pri )
 			: p{p}, n{n}, wo{wo}, time{time}, uv{uv}, primitive{pri}
-            {/* empty */};
+            {};
 
 		point3 p;     //!< Contact point.
 		vec3 n;       //!< The surface normal.

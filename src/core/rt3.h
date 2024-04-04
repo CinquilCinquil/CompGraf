@@ -85,6 +85,8 @@ class Film;
 class Background;
 class BackgroundColor;
 class Camera;
+class Primitive;
+class Surfel;
 
 //float M_PI = 3.14159265359;
 
