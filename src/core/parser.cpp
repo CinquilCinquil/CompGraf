@@ -265,7 +265,11 @@ bool parse_single_COMPOSITE_attrib(tinyxml2::XMLElement* p_element,
     // Create the COMPOSITE value.
     COMPOSITE comp;
     if (n_basic == 2) {
-      comp = COMPOSITE{ values[0], values[1] };
+      for (int i = 0;i < 2;i ++) {
+        comp[i] = values[i];
+      }
+    //comp = COMPOSITE{ values[0], values[1] };
+
     } else if (n_basic == 3) {
       comp = COMPOSITE{ values[0], values[1], values[2] };
     } else {
@@ -279,11 +283,13 @@ bool parse_single_COMPOSITE_attrib(tinyxml2::XMLElement* p_element,
     // Show message (DEBUG only, remove it or comment it out if code is
     // working).
     // --------------------------------------------------------------------------
+    /*
     clog << "\tAdded attribute (" << att_key << ": \"";
     for (const auto& e : comp) {
       clog << e << " ";
     }
     clog << "\")\n";
+    */
     // --------------------------------------------------------------------------
 
     return true;
@@ -356,7 +362,12 @@ bool parse_array_COMPOSITE_attrib(tinyxml2::XMLElement* p_element,
         composit_list.push_back(
           COMPOSITE{ values[3 * i + 0], values[3 * i + 1], values[3 * i + 2] });
       } else {  // COMPOSITE_SIZE == 2
-        composit_list.push_back(COMPOSITE{ values[2 * i + 0], values[2 * i + 1] });
+        COMPOSITE comp;
+          for (int k = 0;k < 2;k ++) {
+          comp[k] = values[2*i + k];
+        }
+        composit_list.push_back(comp);
+        //composit_list.push_back(COMPOSITE{ values[2 * i + 0], values[2 * i + 1] });
       }
     }
 
@@ -368,6 +379,7 @@ bool parse_array_COMPOSITE_attrib(tinyxml2::XMLElement* p_element,
     // Show message (DEBUG only, remove it or comment it out if code is
     // working).
     // --------------------------------------------------------------------------
+    /*
     clog << "\tAdded attribute (" << att_key << ": \"";
     for (const auto& e : composit_list) {
       for (const auto& x : e) {
@@ -375,6 +387,7 @@ bool parse_array_COMPOSITE_attrib(tinyxml2::XMLElement* p_element,
       }
     }
     clog << "\")\n";
+    */
     // --------------------------------------------------------------------------
 
     return true;

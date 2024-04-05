@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <memory>
+#include "sphere.h"
 
 namespace rt3 {
 
@@ -16,30 +17,45 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
   int w = camera->film->m_full_resolution[0];
 	int h = camera->film->m_full_resolution[1];
 
+  vector<Sphere*> obj_list;
+  Sphere * sph = new Sphere(10, point3{1,1,1});
+
+  delete sph;
+   /*= {
+      Sphere(10, point3{1,1,1}),
+      Sphere(02, point3{0,-2,1}),
+      Sphere(05, point3{0,0,-5}),
+    };*/
+
+  /*
   for (int i = hi;i < hf; i++) {
-		for (int j = wi;j < wf; j++) {
-        Ray r1 = camera->generate_ray( i, j );
-        // Generate ray with the Shirley method.
+	for (int j = wi;j < wf; j++) {
 
-        // Print out the two rays, that must be the same (regardless of the method).
-        //std::cout << "Ray1: " << r1 << std::endl;
-        //std::cout << "Point at t=', ray('2') = " << r1(2.f) << std::endl;
+      Spectrum color;
+      bool intersects = false;
+      Ray ray = camera->generate_ray( i, j );
 
-        // Rays are not hitting the scene just yet; so let us sample the background.
+      // Checking if ray hit an object
+      for ( const Primitive& p : obj_list ) {
+
+        if (p.intersect_p(ray)) {
+          color = p.get_material()->color;
+          intersects = true;
+        }
+
+      }
+
+      // If the ray didnt hit any object, then sample from background
+      if (!intersects) {
         float u = ((float) j) / w;
-			  float v = ((float) i) / h;
-        //auto color = background->sampleUV(  rt3::Point2f{float(i)/float(w), float(j)/float(h)} ); // get background color.
-        camera->film->pixels.push_back(background->sampleUV({u, v})); // set image buffer at position (i,j), accordingly.
-    }
+        float v = ((float) i) / h;
+        Spectrum color = background->sampleUV({u, v});
+      }
+
+      camera->film->pixels.push_back(color);
   }
-	/*for (int i = hi;i < hf;i ++) {
-		for (int j = wi;j < wf;j ++) {
-			
-			
-			
-			camera->film->pixels.push_back(background->sampleUV({u, v}));
-		}
-	}*/
+  }
+  */
 	
 	camera->film->write_image();
 }
