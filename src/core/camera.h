@@ -20,7 +20,7 @@ public:
 
 	Film* film;
 
-	Camera(Point2i& size, point3& frame_pos, vec3& look_from, vec3& look_at);
+	Camera(Point2i& size, point3& frame_pos, vec3& look_from, vec3& look_at, vec3& vup);
 
     virtual Ray generate_ray(int x, int y) = 0;
 

@@ -2,7 +2,7 @@
 
 namespace rt3 {
 
-Camera::Camera(Point2i& size, point3& frame_pos, vec3& look_from, vec3& look_at) : frame_pos{look_from} {
+Camera::Camera(Point2i& size, point3& frame_pos, vec3& look_from, vec3& look_at, vec3& vup) : frame_pos{look_from}, vup{vup} {
 
     // Defining left, right, top and bottom bounds
     float screen_proportion = size[0]/size[1];
@@ -13,8 +13,8 @@ Camera::Camera(Point2i& size, point3& frame_pos, vec3& look_from, vec3& look_at)
     // Defining the camera's frame
     vec3 gaze = look_at - look_from;
     vec3 w = normalize(gaze);
-    vec3 u = normalize(cross(vup, w));
-    vec3 v = normalize(cross(w, u));
+    vec3 u = normalize(cross(w, vup)); //vup, w
+    vec3 v = normalize(cross(u, w)); //w, u
 
     frame_vecs = {u, v, w};
 }
@@ -49,23 +49,19 @@ Camera* create_camera(const ParamSet& ps) {
   std::cout << ">>> Inside create_camera()\n";
   
   vec3 lfr = retrieve(ps, "look_from", vec3{ 0, 0, 0 }); /// look down
-  vec3 lat = retrieve(ps, "look_at", vec3{ 1, 0, 0 });
-
-  point3 pos = retrieve(ps, "look_from", point3{ 0, 0, 0 }); // here... ????????
-
+  vec3 lat = retrieve(ps, "look_at", vec3{ 0, 10, 0 });
+  vec3 vup = retrieve(ps, "up", vec3{ 1, 0, 0 });
+  point3 pos = point3{ 0, 0, 0 };
   Point2i size = retrieve(ps, "vpdim", Point2i{16, 9});
-
   std::string cam_type = retrieve<std::string>(ps, "type", string{ "" });
-  
-  std::cout << "AAAAAA: " << cam_type << '\n';
 
   if(cam_type == "orthographic")
   {
-    return new OrthographicCamera(size, pos, lfr, lat);
+    return new OrthographicCamera(size, pos, lfr, lat, vup);
   }
   else
   {
-    return new PerspectiveCamera(size, pos, lfr, lat);
+    return new PerspectiveCamera(size, pos, lfr, lat, vup);
   }
   
 }

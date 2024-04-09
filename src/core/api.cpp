@@ -17,11 +17,23 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
   int w = camera->film->m_full_resolution[0];
 	int h = camera->film->m_full_resolution[1];
 
+  vector<std::shared_ptr<Sphere>> obj_list;
+
+  /*
   vector<std::shared_ptr<Sphere>> obj_list = {
-      std::shared_ptr<Sphere>(new Sphere(10, point3{0,0,0}))//,
+      std::shared_ptr<Sphere>(new Sphere(1, point3{0,5,0}))//,
       //std::shared_ptr<Sphere>(new Sphere(02, point3{0,-2,1})),
       //std::shared_ptr<Sphere>(new Sphere(05, point3{0,0,-5})),
   };
+  */
+
+  for (int i = 0;i < 5; i++) 
+  {
+    for (int j = 0;j < 5; j++) 
+    {
+      obj_list.push_back(std::shared_ptr<Sphere>(new Sphere(1, point3{+ j * 10,-i * 10,- j * 10})));
+    }
+  }
 
   for (int i = hi;i < hf; i++) 
   {
@@ -49,11 +61,11 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
         color = background->sampleUV({u, v});
       }
 
-      /*
+      
       if (i % 100 == 0 && j % 100 == 0) {
         std::cout << color << '\n';
       }
-      */
+      
 
       camera->film->pixels.push_back(color);
 
