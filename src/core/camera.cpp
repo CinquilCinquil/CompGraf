@@ -49,7 +49,7 @@ Camera* create_camera(const ParamSet& ps) {
   std::cout << ">>> Inside create_camera()\n";
   
   vec3 lfr = retrieve(ps, "look_from", vec3{ 0, 0, 0 }); /// look down
-  vec3 lat = retrieve(ps, "look_at", vec3{ 0, 10, 0 });
+  vec3 lat = retrieve(ps, "look_at", vec3{ 0, 1, 0 });
   vec3 vup = retrieve(ps, "up", vec3{ 1, 0, 0 });
   point3 pos = point3{ 0, 0, 0 };
   Point2i size = retrieve(ps, "vpdim", Point2i{1, 1});
