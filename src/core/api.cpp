@@ -31,7 +31,7 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
   {
     for (int j = 0;j < 5; j++) 
     {
-      obj_list.push_back(std::shared_ptr<Sphere>(new Sphere(1, point3{+ j * 10,-i * 10,- j * 10})));
+      obj_list.push_back(std::shared_ptr<Sphere>(new Sphere(10, point3{+ j * 10,-i * 10,- j * 10})));
     }
   }
 
