@@ -9,7 +9,7 @@ class Sphere : public Primitive {
     real_type radius;
 
  public:
-    Sphere(real_type radius, point3 position) : radius{radius}, position{position} {};
+    Sphere(real_type radius, point3 position);
 
     //~Sphere() = default;
 

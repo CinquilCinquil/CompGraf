@@ -1,6 +1,6 @@
 <RT3>
     <camera type="orthographic" />
-    <film type="image" x_res="200" y_res="100" filename="simple_bkg" img_type="png"/>
+    <film type="image" x_res="1000" y_res="1000" filename="simple_bkg" img_type="png"/>
     <world_begin/>
         <background type="colors" mapping="screen" color="153 204 255"/>
     <world_end/>

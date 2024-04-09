@@ -18,7 +18,7 @@ class Primitive {
 		virtual bool intersect_p( const Ray& r ) const = 0;
 
 		const Material * get_material(void) const { return material; }
-	private:
+
 		Material * material;
 };
 

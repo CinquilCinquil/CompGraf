@@ -17,8 +17,10 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
   int w = camera->film->m_full_resolution[0];
 	int h = camera->film->m_full_resolution[1];
 
+
   vector<Primitive*> obj_list;
-  Sphere * sph = new Sphere(10, point3{1,1,1});
+  Sphere* sph = new Sphere(0.13F, point3{1,1,1});
+
 
   /*delete sph;
   {
@@ -28,13 +30,18 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
   };*/
 
   obj_list.push_back(sph);
+
+
   
-  for (int i = hi;i < hf; i++) {
-	for (int j = wi;j < wf; j++) {
+  for (int i = hi;i < hf; i++) 
+  {
+    for (int j = wi;j < wf; j++) 
+    {
 
       Spectrum color;
       bool intersects = false;
       Ray ray = camera->generate_ray( i, j );
+      
 
       // Checking if ray hit an object
       for ( const Primitive* p : obj_list ) {
@@ -42,6 +49,7 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
         if (p->intersect_p(ray)) {
           color = p->get_material()->color;
           intersects = true;
+          break;
         }
 
       }
@@ -52,12 +60,13 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
         float v = ((float) i) / h;
         Spectrum color = background->sampleUV({u, v});
       }
-
+      
       camera->film->pixels.push_back(color);
-  }
+    }
   }
 	
 	camera->film->write_image();
+  delete sph;
 }
 
 //=== API's static members declaration and initialization.
