@@ -85,8 +85,8 @@ void parse_tags(tinyxml2::XMLElement* p_element, int level) {
       };
 
       parse_parameters(p_element, param_list, /* out */ &ps);
-
-      // API::camera(ps);
+      
+      API::camera(ps);
     } else if (tag_name == "background") {
       ParamSet ps;
       vector<std::pair<param_type_e, string>> param_list{

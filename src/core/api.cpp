@@ -17,21 +17,11 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
   int w = camera->film->m_full_resolution[0];
 	int h = camera->film->m_full_resolution[1];
 
-
   vector<std::shared_ptr<Sphere>> obj_list = {
-      std::shared_ptr<Sphere>(new Sphere(10, point3{1,1,1})),
-      std::shared_ptr<Sphere>(new Sphere(02, point3{0,-2,1})),
-      std::shared_ptr<Sphere>(new Sphere(05, point3{0,0,-5})),
+      std::shared_ptr<Sphere>(new Sphere(10, point3{0,0,0}))//,
+      //std::shared_ptr<Sphere>(new Sphere(02, point3{0,-2,1})),
+      //std::shared_ptr<Sphere>(new Sphere(05, point3{0,0,-5})),
   };
-  //std::shared_ptr<Sphere> sph(new Sphere(5, point3{1,1,1}));
-  //obj_list.push_back(sph);
-
-  /*delete sph;
-  {
-      Sphere(10, point3{1,1,1}),
-      Sphere(02, point3{0,-2,1}),
-      Sphere(05, point3{0,0,-5}),
-  };*/
 
   for (int i = hi;i < hf; i++) 
   {
@@ -42,11 +32,12 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
       Ray ray = camera->generate_ray( i, j );
 
       // Checking if ray hit an object
-      for ( std::shared_ptr<Sphere> p : obj_list ) {
+      for (std::shared_ptr<Sphere> p : obj_list) {
         
         if (p->intersect_p(ray)) {
           color = p->get_material()->color;
           intersects = true;
+          break; // remove later
         }
 
       }
@@ -104,8 +95,6 @@ BackgroundColor* API::make_background(const std::string& name, const ParamSet& p
   std::cout << ">>> Inside API::background()\n";
   BackgroundColor* bkg{ nullptr };
   bkg = create_color_background(ps);
-
-  std::cout << "heyyy2";
 
   // Return the newly created background.
   return bkg;
@@ -167,7 +156,7 @@ void API::world_end() {
   std::unique_ptr<BackgroundColor> the_background{ make_background(render_opt->bkg_type,
                                                               render_opt->bkg_ps) };
   // Same with the film, that later on will belong to a camera object.
-  std::unique_ptr<Camera> the_camera{ make_camera (render_opt->camera_type, render_opt-> camera_ps) };
+  std::unique_ptr<Camera> the_camera{ make_camera (render_opt->camera_type, render_opt->camera_ps) };
   the_camera->film = make_film(render_opt->film_type, render_opt->film_ps) ;
 
   // Run only if we got film and background.
@@ -232,6 +221,16 @@ void API::film(const ParamSet& ps) {
   std::string type = retrieve(ps, "type", string{ "unknown" });
   render_opt->film_type = type;
   render_opt->film_ps = ps;
+}
+
+void API::camera(const ParamSet& ps) {
+  std::cout << ">>> Inside API::camera()\n";
+  VERIFY_SETUP_BLOCK("API::camera");
+
+  // retrieve type from ps.
+  std::string type = retrieve(ps, "type", string{ "unknown" });
+  render_opt->camera_type = type;
+  render_opt->camera_ps = ps;
 }
 
 }  // namespace rt3

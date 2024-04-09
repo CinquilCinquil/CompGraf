@@ -57,6 +57,8 @@ Camera* create_camera(const ParamSet& ps) {
 
   std::string cam_type = retrieve<std::string>(ps, "type", string{ "" });
   
+  std::cout << "AAAAAA: " << cam_type << '\n';
+
   if(cam_type == "orthographic")
   {
     return new OrthographicCamera(size, pos, lfr, lat);

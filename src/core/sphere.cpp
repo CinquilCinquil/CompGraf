@@ -46,12 +46,13 @@ bool Sphere::intersect_p( const Ray& r) const
     if(r.direction == point3(0, 0, 0)) { return false; }
     vec3 direct = this->position - r.origin;
     real_type d = scalarProd(direct, direct);
-    real_type t = scalarProd(direct, r.direction);
-    
 
-    point3 point_in = r.direction*(t/d) - direct;
+    auto a1 = scalarProd(r.direction, direct);
+    vec3 r_dir_orto = (abs(a1)/d) * direct;
 
-    real_type point_in_sqrd = scalarProd(point_in, point_in);
+    vec3 veczinho = direct - r_dir_orto;
+
+    real_type point_in_sqrd = scalarProd(veczinho, veczinho);
 
     if(point_in_sqrd > radius*radius) { return false; }
     return true;
