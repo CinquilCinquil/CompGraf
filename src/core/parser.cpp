@@ -93,11 +93,11 @@ void parse_tags(tinyxml2::XMLElement* p_element, int level) {
         { param_type_e::STRING, "type" },
         { param_type_e::STRING, "filename" },  // Texture file name.
         { param_type_e::STRING, "mapping" },   // Type of mapping required.
-        { param_type_e::COLOR, "color" },      // Single color for the entire background.
-        { param_type_e::COLOR, "tl" },         // Top-left corner
-        { param_type_e::COLOR, "tr" },         // Top-right corner
-        { param_type_e::COLOR, "bl" },         // Bottom-left corner
-        { param_type_e::COLOR, "br" }          // Bottom-right corner
+        { param_type_e::SPECTRUM, "color" },      // Single color for the entire background.
+        { param_type_e::SPECTRUM, "tl" },         // Top-left corner
+        { param_type_e::SPECTRUM, "tr" },         // Top-right corner
+        { param_type_e::SPECTRUM, "bl" },         // Bottom-left corner
+        { param_type_e::SPECTRUM, "br" }          // Bottom-right corner
       };
       parse_parameters(p_element, param_list, /* out */ &ps);
 

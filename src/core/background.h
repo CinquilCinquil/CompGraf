@@ -47,16 +47,14 @@ private:
 public:
   /// Ctro receives a list of four colors, for each corner.
   
-  BackgroundColor(const vector<Spectrum>& colors) {
-    // clock-wise starting at bottom_left
-    for (int i = 0;i < 4;i ++) {corners[i] = colors[i];}
-  }
+  BackgroundColor(const vector<Spectrum>& colors);
+  BackgroundColor(const Spectrum& color);
   
   Spectrum lerp(const Spectrum &A, const Spectrum &B, float t) const;
 	
   [[nodiscard]] Spectrum sampleUV(const Point2f& pixel_ndc) const;
 
-  virtual ~BackgroundColor(){};
+  ~BackgroundColor(){};
 };
 
 // factory pattern functions.

@@ -105,6 +105,8 @@ BackgroundColor* API::make_background(const std::string& name, const ParamSet& p
   BackgroundColor* bkg{ nullptr };
   bkg = create_color_background(ps);
 
+  std::cout << "heyyy2";
+
   // Return the newly created background.
   return bkg;
 }
