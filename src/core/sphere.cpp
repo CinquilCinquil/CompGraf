@@ -1,5 +1,6 @@
 
 #include "sphere.h"
+#include <math.h>
 
 namespace rt3 {
 real_type scalarProd(const glm::highp_vec3 &x, const glm::highp_vec3 &y)
@@ -14,20 +15,27 @@ bool Sphere::intersect( const Ray& r, Surfel *sf ) const
     real_type d = scalarProd(direct, direct);
     real_type t = scalarProd(direct, r.direction);
     
+
     point3 point_in = r.direction*(t/d) - direct;
 
     real_type point_in_sqrd = scalarProd(point_in, point_in);
 
     if(point_in_sqrd > radius*radius) { return false; }
 
-    real_type diffin = glm::sqrt<real_type>(radius*radius*point_in_sqrd/d);
+    //const real_type k = radius*radius*point_in_sqrd/d;
+    real_type diffin = sqrt(radius*radius*point_in_sqrd/d);
+
+    sf->p = r.direction*(t/d) - r.direction*diffin;
+    //point3 norm = sf->p - r.origin;
+    sf->n = sf->p - r.origin;
+    sf->wo = -(r.direction);
 
     return true;
 }
 
 bool Sphere::intersect_p( const Ray& r) const
 {
-    return false;
+    return true;
 }
 
 };

@@ -17,17 +17,18 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
   int w = camera->film->m_full_resolution[0];
 	int h = camera->film->m_full_resolution[1];
 
-  vector<Sphere*> obj_list;
+  vector<Primitive*> obj_list;
   Sphere * sph = new Sphere(10, point3{1,1,1});
 
-  delete sph;
-   /*= {
+  /*delete sph;
+  {
       Sphere(10, point3{1,1,1}),
       Sphere(02, point3{0,-2,1}),
       Sphere(05, point3{0,0,-5}),
-    };*/
+  };*/
 
-  /*
+  obj_list.push_back(sph);
+  
   for (int i = hi;i < hf; i++) {
 	for (int j = wi;j < wf; j++) {
 
@@ -36,10 +37,10 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
       Ray ray = camera->generate_ray( i, j );
 
       // Checking if ray hit an object
-      for ( const Primitive& p : obj_list ) {
+      for ( const Primitive* p : obj_list ) {
 
-        if (p.intersect_p(ray)) {
-          color = p.get_material()->color;
+        if (p->intersect_p(ray)) {
+          color = p->get_material()->color;
           intersects = true;
         }
 
@@ -55,7 +56,6 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
       camera->film->pixels.push_back(color);
   }
   }
-  */
 	
 	camera->film->write_image();
 }
