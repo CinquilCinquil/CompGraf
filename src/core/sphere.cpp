@@ -16,24 +16,24 @@ Sphere::Sphere(real_type radius, point3 position) : radius{radius}, position{pos
 
 bool Sphere::intersect( const Ray& r, Surfel *sf ) const
 {
-    if(r.direction == point3(0, 0, 0)) { return false; }
+    //negligible situation
+    if(r.direction == point3(0, 0, 0) || radius == 0 ) { return false; }
+
     vec3 direct = this->position - r.origin;
-    real_type d = scalarProd(direct, direct);
-    real_type t = scalarProd(direct, r.direction);
-    
 
-    point3 point_in = r.direction*(t/d) - direct;
+    real_type direct_distance_sqr = scalarProd(direct, direct);
+    real_type direct_ray_prod = scalarProd(direct, r.direction);
+    point3 proj_point = r.direction*(direct_ray_prod/direct_distance_sqr) - direct;
 
-    real_type point_in_sqrd = scalarProd(point_in, point_in);
+    real_type proj_dist_sqr = scalarProd(proj_point, proj_point);
 
-    if(point_in_sqrd > radius*radius) { return false; }
+    if(proj_dist_sqr > radius*radius) { return false; }
 
-    //const real_type k = radius*radius*point_in_sqrd/d;
-    real_type diffin = sqrt(radius*radius*point_in_sqrd/d);
+    //const real_type k = radius*radius*proj_dist_sqr/direct_distance_sqr;
+    real_type diffin = sqrt(radius*radius*proj_dist_sqr/direct_distance_sqr);
 
-    sf->p = r.direction*(t/d) - r.direction*diffin;
-    //point3 norm = sf->p - r.origin;
-    sf->n = sf->p - r.origin;
+    sf->p = r.direction*((direct_ray_prod/direct_distance_sqr) - diffin);
+    sf->n = (sf->p - r.origin) * (1/radius);
     sf->wo = -(r.direction);
 
     return true;
@@ -41,21 +41,19 @@ bool Sphere::intersect( const Ray& r, Surfel *sf ) const
 
 bool Sphere::intersect_p( const Ray& r) const
 {   
-    //stub
-    
-    if(r.direction == point3(0, 0, 0)) { return false; }
+    //negligible situation
+    if(r.direction == point3(0, 0, 0) || radius == 0 ) { return false; }
+
     vec3 direct = this->position - r.origin;
-    real_type d = scalarProd(direct, direct);
 
-    auto a1 = scalarProd(r.direction, direct);
-    vec3 r_dir_orto = (abs(a1)/d) * direct;
+    real_type direct_distance_sqr = scalarProd(direct, direct);
+    real_type direct_ray_prod = scalarProd(direct, r.direction);
+    point3 proj_point = r.direction*(direct_ray_prod/direct_distance_sqr) - direct;
 
-    vec3 veczinho = direct - r_dir_orto;
+    real_type proj_dist_sqr = scalarProd(proj_point, proj_point);
 
-    real_type point_in_sqrd = scalarProd(veczinho, veczinho);
-
-    if(point_in_sqrd > radius*radius) { return false; }
-    return true;
+    //ray's projection touches sphere?
+    return proj_dist_sqr <= radius*radius;
 }
 
 };

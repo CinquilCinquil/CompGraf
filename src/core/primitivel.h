@@ -29,6 +29,8 @@ class Surfel {
 			: p{p}, n{n}, wo{wo}, time{time}, uv{uv}, primitive{pri}
             {};
 
+		Surfel(const Primitive *pri ) : primitive{pri} {};
+
 		point3 p;     //!< Contact point.
 		vec3 n;       //!< The surface normal.
 		vec3 wo;      //!< Outgoing direction of light, which is -ray.

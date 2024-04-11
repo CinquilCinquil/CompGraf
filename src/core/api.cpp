@@ -18,8 +18,8 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
 	int h = camera->film->m_full_resolution[1];
 
 
-  vector<std::shared_ptr<Sphere>> obj_list = {
-      std::shared_ptr<Sphere>(new Sphere(120, point3{1000,0,-1000}))//,
+  vector<std::shared_ptr<Primitive>> obj_list = {
+      std::shared_ptr<Primitive>(new Sphere(50, point3{100,0,-100}))//,
       //std::shared_ptr<Sphere>(new Sphere(02, point3{0,-2,1})),
       //std::shared_ptr<Sphere>(new Sphere(05, point3{0,0,-5})),
   };
@@ -47,12 +47,11 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
       Ray ray = camera->generate_ray( i, j );
 
       // Checking if ray hit an object
-      for (std::shared_ptr<Sphere> p : obj_list) {
+      for (std::shared_ptr<Primitive> p : obj_list) {
         
         if (p->intersect_p(ray)) {
           color = p->get_material()->color;
           intersects = true;
-          break; // remove later
         }
 
       }
