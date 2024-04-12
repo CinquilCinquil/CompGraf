@@ -5,8 +5,9 @@ namespace rt3 {
 
 class Sphere : public Primitive {
  private:
-    point3 position;
-    real_type radius;
+   point3 position;
+   real_type radius;
+
 
  public:
     Sphere(real_type radius, point3 position);

@@ -80,6 +80,10 @@ std::ostream& operator<<(std::ostream& os, const std::array<T, S>& v) {
   return os;
 }
 
+template <typename T> int sign(T val) {
+    return (T(0) < val) - (val < T(0));
+}
+
 // Global Forward Declarations
 class Film;
 class Background;

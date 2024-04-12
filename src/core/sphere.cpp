@@ -33,12 +33,17 @@ bool Sphere::intersect( const Ray& r, Surfel *sf ) const
 
     real_type diffin = sqrt(radius*radius*proj_dist_sqr/direct_distance_sqr);
 
-    sf->p = this->position + proj_point_vec - (r.direction*diffin);
+    proj_point_vec -= r.direction*diffin;
+    sf->p = this->position + proj_point_vec;
     sf->n = (sf->p - r.origin) * (1/radius);
     sf->wo = -(r.direction);
-    sf->uv = {  asin((sf->p[0]-this->position[0])/radius)/(4*PI) + 0.5F, 
-                asin((sf->p[1]-this->position[1])/radius)/(2*PI)
-            };
+
+    auto a = proj_point_vec[0]/radius;
+    auto b = proj_point_vec[1]/sqrt(proj_point_vec[1]*proj_point_vec[1] + proj_point_vec[2]*proj_point_vec[2]);
+       
+    sf->uv = {  a/2 + 1, (b+sign(proj_point_vec[2]))/4 + 1};
+
+    std::cout<<"UV: " << sf->uv[0] << ", " << sf->uv[1] << std::endl;
     
     return true;
 }
