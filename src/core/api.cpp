@@ -19,9 +19,9 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
 
 
   vector<std::shared_ptr<Primitive>> obj_list = {
-      std::shared_ptr<Primitive>(new Sphere(50, point3{100,0,-100}))//,
-      //std::shared_ptr<Sphere>(new Sphere(02, point3{0,-2,1})),
-      //std::shared_ptr<Sphere>(new Sphere(05, point3{0,0,-5})),
+      std::shared_ptr<Primitive>(new Sphere(120, point3{1000,0,-1000})),
+      std::shared_ptr<Sphere>(new Sphere(200, point3{500, -50, -700})),
+      std::shared_ptr<Sphere>(new Sphere(100, point3{1500, -10 , -1800})),
   };
   // left is +x
   // top is +z
@@ -49,8 +49,9 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
       // Checking if ray hit an object
       for (std::shared_ptr<Primitive> p : obj_list) {
         
-        if (p->intersect_p(ray)) {
-          color = p->get_material()->color;
+        Surfel* sf = new Surfel(p.get());
+        if (p->intersect(ray, sf)) {
+          color = p->get_material()->sampleUV(sf->uv);
           intersects = true;
         }
 
