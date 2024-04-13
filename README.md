@@ -1,5 +1,6 @@
 # CompGraf
+To compile: ```g++ src/*/*.cpp -std=c++17```
 
-To compile: ```g++ -I ../ main.cpp -o a.exe```
+To run: ```./a.exe```
 
-To execute: ```./a.exe```
+Shortcut: ```g++ src/*/*.cpp -std=c++17 && ./a.exe scene/scene_01.xml```
