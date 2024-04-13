@@ -19,7 +19,9 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
 
 
   vector<std::shared_ptr<Primitive>> obj_list = {
-      std::shared_ptr<Primitive>(new Sphere(1, point3{0, 1, 0}))
+      std::shared_ptr<Sphere>(new Sphere(0.4, point3{-1, 0.5, 5})),
+      std::shared_ptr<Sphere>(new Sphere(0.4, point3{1, -0.5, 8})),
+      std::shared_ptr<Sphere>(new Sphere(0.4, point3{-1, -1.5 , 3.5}))
   };
 
   for (int i = hi;i < hf; i++) 
@@ -161,7 +163,8 @@ void API::world_end() {
                                                               render_opt->bkg_ps) };
   // Same with the film, that later on will belong to a camera object.
   std::unique_ptr<Camera> the_camera{ make_camera (render_opt->camera_type, render_opt->camera_ps) };
-  the_camera->film = make_film(render_opt->film_type, render_opt->film_ps) ;
+  the_camera->film = make_film(render_opt->film_type, render_opt->film_ps);
+  if (the_camera->get_res_from_film) {the_camera->setResFromFilm();}
 
   // Run only if we got film and background.
   if (the_camera and the_background) {

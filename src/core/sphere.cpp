@@ -30,7 +30,7 @@ bool Sphere::intersect( const Ray& r, Surfel *sf ) const
 
     real_type direct_distance_sqr = scalarProd(direct, direct);
     real_type direct_ray_prod = scalarProd(direct, r.direction);
-    point3 proj_point_vec = r.direction*(direct_ray_prod/direct_distance_sqr) - direct;
+    point3 proj_point_vec = r.direction * (direct_ray_prod/scalarProd(r.direction, r.direction)) - direct;
 
     real_type proj_dist_sqr = scalarProd(proj_point_vec, proj_point_vec);
 
