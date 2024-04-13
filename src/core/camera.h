@@ -21,7 +21,7 @@ public:
 	Film* film;
 
 	Camera(Point2i& vpdim, point3& frame_pos, vec3& look_from, vec3& look_at, vec3& vup,
-	 std::array<real_type, 4> screen_window, real_type frame_aspectratio);
+	 vector<real_type> screen_window, real_type frame_aspectratio);
 
     virtual Ray generate_ray(int x, int y) = 0;
 

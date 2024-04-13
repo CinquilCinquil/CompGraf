@@ -3,10 +3,16 @@
 namespace rt3 {
 
 Camera::Camera(Point2i& vpdim, point3& frame_pos, vec3& look_from, vec3& look_at, vec3& vup,
- std::array<real_type, 4> screen_window, real_type frame_aspectratio) : frame_pos{look_from}, vup{vup}  {
+ vector<real_type> screen_window, real_type frame_aspectratio) : frame_pos{look_from}, vup{vup}  {
+
+    real_type screen_proportion = vpdim[0]/vpdim[1];
+
+    // frame_aspectratio was specified in file
+    if (frame_aspectratio != -1) {
+      screen_proportion = frame_aspectratio;
+    }
 
     // Defining left, right, top and bottom bounds
-    real_type screen_proportion = vpdim[0]/vpdim[1];
     l = -screen_proportion; r = +screen_proportion;
     b = -1.0; t = +1.0;
     nx = vpdim[0]; ny = vpdim[1];
@@ -15,11 +21,6 @@ Camera::Camera(Point2i& vpdim, point3& frame_pos, vec3& look_from, vec3& look_at
     if (screen_window[0] != -1) {
       l = screen_window[0]; r = screen_window[1];
       b = screen_window[2]; t = screen_window[3];
-    }
-
-    // frame_aspectratio was specified in file
-    if (frame_aspectratio != -1) {
-      screen_proportion = frame_aspectratio;
     }
 
     // Defining the camera's frame
@@ -77,12 +78,9 @@ Camera* create_camera(const ParamSet& ps) {
   // camera proportions
 
   Point2i vpdim = retrieve(ps, "vpdim", Point2i{1000, 1000});
-  std::array<real_type, 4> scr_window = retrieve(ps, "screen_window", std::array<real_type, 4>{-1, -1, -1, -1});
+  vector<real_type> scr_window = retrieve(ps, "screen_window", vector<real_type>{-1, -1, -1, -1});
   real_type frame_aspectratio = retrieve(ps, "frame_aspectratio", real_type{-1});
-
-  std::cout << vpdim << "aaaaaaaaaaa\n";
-  std::cout << scr_window << "aaaaaaaaaaa\n";
-  std::cout << frame_aspectratio << "aaaaaaaaaaa\n";
+  real_type fovy = retrieve(ps, "fovy", real_type{-1});
 
   if(cam_type == "orthographic")
   {
