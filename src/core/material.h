@@ -14,7 +14,7 @@ public:
 };
 
 class MatSphereUV : public Material {
-    [[nodiscard]] Spectrum sampleUV(const Point2f& pixel_ndc) const override {return Spectrum{0, 0, 0};};
+    [[nodiscard]] Spectrum sampleUV(const Point2f& pixel_ndc) const override {return Spectrum{255, 0, 0};};
 };
 
 }

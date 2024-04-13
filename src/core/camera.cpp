@@ -28,7 +28,7 @@ Camera::Camera(Point2i& vpdim, point3& frame_pos, vec3& look_from, vec3& look_at
     vec3 gaze = look_at - look_from;
     vec3 w = normalize(gaze);
     vec3 u = normalize(cross(vup, w)); //vup, w
-    vec3 v = normalize(cross(w, u)); //w, u
+    vec3 v = normalize(cross(u, w)); //w, u
 
     // (vertical, forward, horizontal)
 
