@@ -2,8 +2,6 @@
 #include "sphere.h"
 #include <math.h>
 
-#define PI 3.14159265
-
 namespace rt3 {
 real_type scalarProd(const glm::highp_vec3 &x, const glm::highp_vec3 &y)
 {

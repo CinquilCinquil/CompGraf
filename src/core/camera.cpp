@@ -3,9 +3,9 @@
 namespace rt3 {
 
 Camera::Camera(Point2i& vpdim, point3& frame_pos, vec3& look_from, vec3& look_at, vec3& vup,
- vector<real_type> screen_window, real_type frame_aspectratio) : frame_pos{look_from}, vup{vup}  {
+ vector<real_type> screen_window, real_type frame_aspectratio, real_type fovy) : frame_pos{look_from}, vup{vup}  {
 
-    real_type screen_proportion = vpdim[0]/vpdim[1];
+    real_type screen_proportion = ((float)vpdim[0])/((float)vpdim[1]);
 
     // frame_aspectratio was specified in file
     if (frame_aspectratio != -1) {
@@ -22,6 +22,15 @@ Camera::Camera(Point2i& vpdim, point3& frame_pos, vec3& look_from, vec3& look_at
       l = screen_window[0]; r = screen_window[1];
       b = screen_window[2]; t = screen_window[3];
       get_res_from_film = true;
+    }
+
+    if (fovy != -1) {
+      t = tan(Radians(fovy/2));
+      b = -t;
+      r = t * screen_proportion;
+      cout << screen_proportion << '\n';
+      cout << r << '\n';
+      l = -r;
     }
 
     // Defining the camera's frame
@@ -90,11 +99,11 @@ Camera* create_camera(const ParamSet& ps) {
 
   if(cam_type == "orthographic")
   {
-    return new OrthographicCamera(vpdim, pos, lfr, lat, vup, scr_window, frame_aspectratio);
+    return new OrthographicCamera(vpdim, pos, lfr, lat, vup, scr_window, frame_aspectratio, fovy);
   }
   else
   {
-    return new PerspectiveCamera(vpdim, pos, lfr, lat, vup, scr_window, frame_aspectratio);
+    return new PerspectiveCamera(vpdim, pos, lfr, lat, vup, scr_window, frame_aspectratio, fovy);
   }
   
 }
