@@ -19,15 +19,17 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
 
 
   vector<std::shared_ptr<Primitive>> obj_list = {
-      std::shared_ptr<Primitive>(new Sphere(120, point3{1000,0,-1000})),
-      std::shared_ptr<Sphere>(new Sphere(200, point3{500, -50, -700})),
-      std::shared_ptr<Sphere>(new Sphere(100, point3{1500, -10 , -1800})),
+      std::shared_ptr<Primitive>(new Sphere(1, point3{0, 0, 0}))
   };
   // left is +x
   // top is +z
   // up is +y
 
  /*
+  std::shared_ptr<Sphere>(new Sphere(0.4, point3{-1, 0.5, 5})),
+      std::shared_ptr<Sphere>(new Sphere(0.4, point3{1, -0.5, 8})),
+      std::shared_ptr<Sphere>(new Sphere(0.4, point3{-1, -1.5 , 3.5}))
+
   vector<std::shared_ptr<Sphere>> obj_list;
   for (int i = 0;i < 5; i++) 
   {
@@ -44,6 +46,8 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
     {
       Spectrum color;
       bool intersects = false;
+      int i_ = (((float) i) / ((float) h)) * camera->getNx();
+      int j_ = (((float) j) / ((float) w)) * camera->getNy();
       Ray ray = camera->generate_ray( i, j );
 
       // Checking if ray hit an object

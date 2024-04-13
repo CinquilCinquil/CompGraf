@@ -23,6 +23,11 @@ bool Sphere::intersect( const Ray& r, Surfel *sf ) const
 
     vec3 direct = this->position - r.origin;
 
+    // not pointing towards the same general direction
+    if (scalarProd(direct, r.direction) < 0) {
+        return false;
+    }
+
     real_type direct_distance_sqr = scalarProd(direct, direct);
     real_type direct_ray_prod = scalarProd(direct, r.direction);
     point3 proj_point_vec = r.direction*(direct_ray_prod/direct_distance_sqr) - direct;
@@ -43,7 +48,7 @@ bool Sphere::intersect( const Ray& r, Surfel *sf ) const
        
     sf->uv = {  a/2 + 1, (b+sign(proj_point_vec[2]))/4 + 1};
 
-    std::cout<<"UV: " << sf->uv[0] << ", " << sf->uv[1] << std::endl;
+    //std::cout<<"UV: " << sf->uv[0] << ", " << sf->uv[1] << std::endl;
     
     return true;
 }

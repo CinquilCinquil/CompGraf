@@ -22,7 +22,7 @@
 #include "../ext/glm/ext/vector_float3.hpp"
 #include "../ext/glm/ext/vector_int3.hpp"
 
-# define GLM_FORCE_LEFT_HANDED
+//# define GLM_FORCE_LEFT_HANDED
 
 using std::array;
 using std::vector;

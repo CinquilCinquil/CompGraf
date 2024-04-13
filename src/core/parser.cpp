@@ -73,10 +73,10 @@ void parse_tags(tinyxml2::XMLElement* p_element, int level) {
         { param_type_e::POINT3F, "look_from" },
         { param_type_e::POINT3F, "look_at" },
         { param_type_e::VEC3F, "up" },
-        { param_type_e::POINT2I, "vpdim" },  // The viewport dimensions defined by the scene
+        { param_type_e::POINT2I, "vpdim" },  // The viewport dimensions defined by the scene (ex: 400 x 300)
         // Legacy parameters ENDS.
         { param_type_e::REAL, "fovy" },
-        { param_type_e::REAL, "focal_distance" },
+        { param_type_e::REAL, "focal_distance" }, // 1...
         { param_type_e::REAL, "frame_aspectratio" },  // By default it's calulated from the x/y
                                                       // resolution, but it might be overridden.
         { param_type_e::ARR_REAL, "screen_window" }   // Bounds of the film in screen space. [-1,1]
@@ -193,9 +193,9 @@ void parse_parameters(tinyxml2::XMLElement* p_element,
     case param_type_e::POINT3F:
       parse_single_COMPOSITE_attrib<real_type, Point3f>(p_element, ps_out, name);
       break;
-    // case param_type_e::POINT2I:
-    // parse_single_COMPOSITE_attrib<int, Point2i, int(2)>( p_element, ps_out,
-    // name ); break;
+     case param_type_e::POINT2I:
+     parse_single_COMPOSITE_attrib2<int, Point2i>( p_element, ps_out, name );
+     break;
     case param_type_e::COLOR:
       parse_single_COMPOSITE_attrib<uint8_t, Color24>(p_element, ps_out, name);
       break;
@@ -291,6 +291,50 @@ bool parse_single_COMPOSITE_attrib(tinyxml2::XMLElement* p_element,
     clog << "\")\n";
     */
     // --------------------------------------------------------------------------
+
+    return true;
+  }
+  return false;
+}
+
+template <typename BASIC, typename COMPOSITE>
+bool parse_single_COMPOSITE_attrib2(tinyxml2::XMLElement* p_element,
+                                   rt3::ParamSet* ps,
+                                   string att_key) {
+  // Attribute() returns the value of the attribute as a const char *, or
+  // nullptr if such attribute does not exist.
+  const char* att_value_cstr = p_element->Attribute(att_key.c_str());
+  // Test whether the att_key exists.
+  if (att_value_cstr) {
+    // Create a temporary array to store all the BASIC data. (e.g. BASIC =
+    // float) This read all the BASIC values into a single array.
+    auto result = read_array<BASIC>(p_element, att_key);
+    // Error check
+    if (not result.has_value()) {
+      RT3_ERROR(string{ "parse_single_COMPOSITE_attrib(): could not read values "
+                        "for attribute \""
+                        + att_key + "\"!" });
+    }
+
+    // Values ok, get the value inside optional.
+    vector<BASIC> values{ result.value() };
+    // Get array length
+    auto n_basic{ values.size() };  // How many?
+    // Create the COMPOSITE value.
+    COMPOSITE comp;
+    if (n_basic == 2) {
+      for (int i = 0;i < 2;i ++) {
+        comp[i] = values[i];
+      }
+    //comp = COMPOSITE{ values[0], values[1] };
+
+    } else {
+      return false;  // Invalid number of basic components.
+    }
+
+    // Store the vector of composites in the ParamSet object.
+    // Recall that `ps` is a dictionary, that receives a pair { key, value }.
+    (*ps)[att_key] = std::make_shared<Value<COMPOSITE>>(comp);
 
     return true;
   }
