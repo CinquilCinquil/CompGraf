@@ -2,11 +2,14 @@
 
 #include <chrono>
 #include <memory>
+#include "material.h"
 #include "sphere.h"
+
+#define PI 3.14159265
 
 namespace rt3 {
 
-void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> & background) {
+void render(std::unique_ptr<Camera> & camera, std::unique_ptr<Scene> & scene) {
 
   int wi = camera->film->m_initial_points[0];
 	int hi = camera->film->m_initial_points[1];
@@ -17,7 +20,7 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
   int w = camera->film->m_full_resolution[0];
 	int h = camera->film->m_full_resolution[1];
 
-
+/*
   vector<std::shared_ptr<Primitive>> obj_list = {
       std::shared_ptr<Primitive>(new Sphere(1, point3{0, 0, 0}))
   };
@@ -25,7 +28,7 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
   // top is +z
   // up is +y
 
- /*
+ 
   std::shared_ptr<Sphere>(new Sphere(0.4, point3{-1, 0.5, 5})),
       std::shared_ptr<Sphere>(new Sphere(0.4, point3{1, -0.5, 8})),
       std::shared_ptr<Sphere>(new Sphere(0.4, point3{-1, -1.5 , 3.5}))
@@ -51,7 +54,7 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
       Ray ray = camera->generate_ray( i, j );
 
       // Checking if ray hit an object
-      for (std::shared_ptr<Primitive> p : obj_list) {
+      for (std::shared_ptr<Primitive> p : scene->obj_list) {
         
         Surfel* sf = new Surfel(p.get());
         if (p->intersect(ray, sf)) {
@@ -65,7 +68,7 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
       if (!intersects) {
         float u = ((float) j) / w;
         float v = ((float) i) / h;
-        color = background->sampleUV({u, v});
+        color = scene->background->sampleUV({u, v});
       }
 
       /*
@@ -88,6 +91,8 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<BackgroundColor> &
 API::APIState API::curr_state = APIState::Uninitialized;
 RunningOptions API::curr_run_opt;
 std::unique_ptr<RenderOptions> API::render_opt;
+std::unique_ptr<Scene> API::curr_scene;
+std::shared_ptr<Material> API::curr_material;
 // GraphicsState API::curr_GS;
 
 // THESE FUNCTIONS ARE NEEDED ONLY IN THIS SOURCE FILE (NO HEADER NECESSARY)
@@ -163,6 +168,7 @@ void API::run() {
 void API::world_begin() {
   VERIFY_SETUP_BLOCK("API::world_begin");  // check for correct machine state.
   curr_state = APIState::WorldBlock;       // correct machine state.
+  curr_scene = std::make_unique<Scene>();
 }
 
 void API::world_end() {
@@ -173,14 +179,13 @@ void API::world_end() {
 
   // At this point, we have the background as a solitary pointer here.
   // In the future, the background will be parte of the scene object.
-  std::unique_ptr<BackgroundColor> the_background{ make_background(render_opt->bkg_type,
-                                                              render_opt->bkg_ps) };
+  curr_scene->background = make_background(render_opt->bkg_type, render_opt->bkg_ps) ;
   // Same with the film, that later on will belong to a camera object.
   std::unique_ptr<Camera> the_camera{ make_camera (render_opt->camera_type, render_opt->camera_ps) };
   the_camera->film = make_film(render_opt->film_type, render_opt->film_ps) ;
 
   // Run only if we got film and background.
-  if (the_camera and the_background) {
+  if (the_camera and curr_scene->background) {
     RT3_MESSAGE("    Parsing scene successfuly done!\n");
     RT3_MESSAGE("[2] Starting ray tracing progress.\n");
 
@@ -195,7 +200,7 @@ void API::world_end() {
     //================================================================================
     auto start = std::chrono::steady_clock::now();
 	
-    render(the_camera, the_background);  // TODO: This is the ray tracer's  main loop.
+    render(the_camera, curr_scene);  // TODO: This is the ray tracer's  main loop.
 	
     auto end = std::chrono::steady_clock::now();
     //================================================================================
@@ -251,6 +256,31 @@ void API::camera(const ParamSet& ps) {
   std::string type = retrieve(ps, "type", string{ "unknown" });
   render_opt->camera_type = type;
   render_opt->camera_ps = ps;
+}
+
+void API::material(const ParamSet& ps) {
+  std::cout << ">>> Inside API::material()\n";
+  VERIFY_WORLD_BLOCK("API::material");
+
+  curr_material = shared_ptr<Material>(create_material(ps));
+}
+
+void API::object(const ParamSet& ps) 
+{
+  std::cout << ">>> Inside API::object()\n";
+  VERIFY_WORLD_BLOCK("API::object");
+  std::string type = retrieve(ps, "type", string{ "unknown" });
+
+  std::cout<<"\n\n Api \n\n";
+  if(type == "sphere")
+  {
+    Sphere* s = new Sphere(retrieve<real_type>(ps, "radius", 0), retrieve<Point3f>(ps, "position", Point3f{0,0,0}));
+    s->material = curr_material.get();
+    curr_scene->obj_list.push_back(shared_ptr<Sphere>(s));
+
+    std::cout<<"\n\n sphere \n\n";
+  }
+  
 }
 
 }  // namespace rt3

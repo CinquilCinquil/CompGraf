@@ -118,13 +118,40 @@ void parse_tags(tinyxml2::XMLElement* p_element, int level) {
       API::film(ps);
     } else if (tag_name == "lookat") {
       ParamSet ps;
-      vector<std::pair<param_type_e, string>> param_list{ { param_type_e::POINT3F, "look_from" },
-                                                          { param_type_e::POINT3F, "look_at" },
-                                                          { param_type_e::VEC3F, "up" } };
-
+      vector<std::pair<param_type_e, string>> param_list{ 
+        { param_type_e::POINT3F, "look_from" },
+        { param_type_e::POINT3F, "look_at" },
+        { param_type_e::VEC3F, "up" } 
+      };
       parse_parameters(p_element, param_list, /* out */ &ps);
       // API::look_at(ps);
-    } else if (tag_name == "world_begin") {
+    } else if (tag_name == "object") {
+      ParamSet ps;
+      // List of parameters that might be defined inside the object's tag.
+      vector<std::pair<param_type_e, string>> param_list{
+        { param_type_e::STRING, "type" },
+        { param_type_e::POINT3F, "position" },
+        { param_type_e::REAL, "radius" },
+        { param_type_e::ARR_VEC3F, "vertices" },
+        { param_type_e::ARR_INT, "triangles" },
+      };
+
+      parse_parameters(p_element, param_list, /* out */ &ps);
+      std::cout<<"\n\n PARSER \n\n";
+      API::object(ps);
+
+    } else if (tag_name == "material") {
+      ParamSet ps;
+      // List of parameters that might be defined inside the material's tag.
+      vector<std::pair<param_type_e, string>> param_list{
+        { param_type_e::STRING, "type" },
+        { param_type_e::SPECTRUM, "color" }//TODO ,
+        //{ param_type_e::TEXTURE, "texture" },
+      };
+
+      parse_parameters(p_element, param_list, /* out */ &ps);
+    }
+    else if (tag_name == "world_begin") {
       // std::clog << ">>> Entering WorldBegin, at level " << level+1 <<
       // std::endl;
       //  We should get only one `world` tag per scene file.

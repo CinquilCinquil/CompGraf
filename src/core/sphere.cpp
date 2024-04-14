@@ -10,9 +10,9 @@ real_type scalarProd(const glm::highp_vec3 &x, const glm::highp_vec3 &y)
     return glm::dot<3, float, glm::qualifier::highp>(x, y);
 }
 
-Sphere::Sphere(real_type radius, point3 position) : radius{radius}, position{position} 
+Sphere::Sphere(real_type radius, point3 position) : radius{radius}
 {
-    this->material = new MatSphereUV();
+    this->position = position; 
 }
 
 

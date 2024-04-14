@@ -1,7 +1,8 @@
 #ifndef BACKGROUND_H
 #define BACKGROUND_H
 
-#include "rt3-base.h"
+#include "rt3.h"
+#include "parser.h"
 
 namespace rt3 {
 // TODO: Create a virtual class Background and derive BackgroundColor,

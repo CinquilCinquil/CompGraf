@@ -1,6 +1,9 @@
-//#include <memory>
+#ifndef PRIMITIVE_H
+#define PRIMITIVE_H
 
-#include "rt3-base.h"
+
+#include "rt3.h"
+#include "ray.h"
 #include "material.h"
 
 namespace rt3 {
@@ -20,6 +23,7 @@ class Primitive {
 		const Material * get_material(void) const { return material; }
 
 		Material * material;
+		Point3f position = {0,0,0};
 };
 
 class Surfel {
@@ -40,3 +44,5 @@ class Surfel {
 };
 
 }
+
+#endif
