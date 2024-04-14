@@ -4,6 +4,7 @@
 #include <string>
 
 #include "rt3-base.h"
+#include "scene.h"
 
 //=== API Macro definitions
 
@@ -67,6 +68,7 @@ public:
 
   /// Stores the running options collect in main().
   static RunningOptions curr_run_opt;
+  
 
 private:
   /// Current API state
@@ -82,10 +84,9 @@ private:
   // /// The current GraphicsState
   // static GraphicsState curr_GS;
   // [NOT NECESSARY IN THIS PROJECT]
-  // /// Pointer to the scene. We keep it as parte of the API because it may be
-  // reused later [1] Create the integrator. static unique_ptr< Scene >
-  // the_scene;
-
+  static std::unique_ptr<Scene> curr_scene;
+  static std::shared_ptr<Material> curr_material;
+  
   // === Helper functions.
   ///
   static Film *make_film(const string &name, const ParamSet &ps);
@@ -102,6 +103,8 @@ public:
   static void film(const ParamSet &ps);
   static void camera(const ParamSet &ps);
   static void background(const ParamSet &ps);
+  static void material(const ParamSet &ps);
+  static void object(const ParamSet &ps);
   static void world_begin();
   static void world_end();
 };

@@ -19,6 +19,5 @@
 #include "camera.h"
 #include "background.h"
 #include "film.h"
-//#include "primitivel.h" <proibído>
 
 #endif  // RT3-BASE_H
