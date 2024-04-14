@@ -5,12 +5,11 @@
 #include "material.h"
 #include "sphere.h"
 
-#define PI 3.14159265
 
 namespace rt3 {
 
 void render(std::unique_ptr<Camera> & camera, std::unique_ptr<Scene> & scene) {
-
+  
   int wi = camera->film->m_initial_points[0];
 	int hi = camera->film->m_initial_points[1];
   
@@ -24,23 +23,20 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<Scene> & scene) {
   {
     for (int j = wi;j < wf; j++) 
     {
-
       int dw = camera->getNx() - w;
       int dh = camera->getNy() - h;
 
       Spectrum color;
       bool intersects = false;
       Ray ray = camera->generate_ray( j + dw/2, i + dh/2 );
-
+      
       // Checking if ray hit an object
       for (std::shared_ptr<Primitive> p : scene->obj_list) {
-        
         Surfel* sf = new Surfel(p.get());
         if (p->intersect(ray, sf)) {
           color = p->get_material()->sampleUV(sf->uv);
           intersects = true;
         }
-
       }
 
       // If the ray didnt hit any object, then sample from background
@@ -50,12 +46,6 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<Scene> & scene) {
         color = scene->background->sampleUV({u, v});
       }
 
-      /*
-      if (i % 100 == 0 && j % 100 == 0) {
-        std::cout << color << '\n';
-      }
-      */
-      
 
       camera->film->pixels.push_back(color);
 
@@ -251,14 +241,12 @@ void API::object(const ParamSet& ps)
   VERIFY_WORLD_BLOCK("API::object");
   std::string type = retrieve(ps, "type", string{ "unknown" });
 
-  std::cout<<"\n\n Api \n\n";
   if(type == "sphere")
   {
-    Sphere* s = new Sphere(retrieve<real_type>(ps, "radius", 0), retrieve<Point3f>(ps, "position", Point3f{0,0,0}));
+    Sphere* s = new Sphere(retrieve<real_type>(ps, "radius", 0), retrieve<Point3f>(ps, "center", Point3f{0,0,0}));
     s->material = curr_material.get();
     curr_scene->obj_list.push_back(shared_ptr<Sphere>(s));
 
-    std::cout<<"\n\n sphere \n\n";
   }
   
 }
