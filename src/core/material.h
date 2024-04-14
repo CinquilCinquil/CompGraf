@@ -18,13 +18,7 @@ public:
 
 };
 
-<<<<<<< HEAD
-class MatSphereUV : public Material {
-    [[nodiscard]] Spectrum sampleUV(const Point2f& pixel_ndc) const override {return Spectrum{255, 0, 0};};
-};
-=======
 Material* create_material(const ParamSet& ps);
 }
->>>>>>> main
 
 #endif

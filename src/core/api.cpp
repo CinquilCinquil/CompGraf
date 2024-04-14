@@ -20,24 +20,6 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<Scene> & scene) {
   int w = camera->film->m_full_resolution[0];
 	int h = camera->film->m_full_resolution[1];
 
-/*
-  vector<std::shared_ptr<Primitive>> obj_list = {
-<<<<<<< HEAD
-      std::shared_ptr<Sphere>(new Sphere(0.4, point3{-1, 0.5, 5})),
-=======
-      std::shared_ptr<Primitive>(new Sphere(1, point3{0, 0, 0}))
-  };
-  // left is +x
-  // top is +z
-  // up is +y
-
- 
-  std::shared_ptr<Sphere>(new Sphere(0.4, point3{-1, 0.5, 5})),
->>>>>>> main
-      std::shared_ptr<Sphere>(new Sphere(0.4, point3{1, -0.5, 8})),
-      std::shared_ptr<Sphere>(new Sphere(0.4, point3{-1, -1.5 , 3.5}))
-  };
-
   for (int i = hi;i < hf; i++) 
   {
     for (int j = wi;j < wf; j++) 
