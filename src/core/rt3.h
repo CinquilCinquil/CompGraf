@@ -24,6 +24,8 @@
 
 //# define GLM_FORCE_LEFT_HANDED
 
+#define PI 3.14159265359
+
 using std::array;
 using std::vector;
 using std::tuple;
@@ -135,10 +137,10 @@ template <typename T, typename U, typename V> inline T Clamp(T val, U low, V hig
 }
 
 /// Degrees to radians.
-inline float Radians(float deg) { return ((float)(3.14159265359) / 180.F) * deg; }
+inline float Radians(float deg) { return ((float)(PI) / 180.F) * deg; }
 
 /// Radians to degreees.
-inline float Degrees(float rad) { return (180.F / (float)(3.14159265359)) * rad; }
+inline float Degrees(float rad) { return (180.F / (float)(PI)) * rad; }
 }  // namespace rt3
 
 #endif  // RT3_H

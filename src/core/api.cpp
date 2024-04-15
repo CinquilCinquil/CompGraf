@@ -5,12 +5,11 @@
 #include "material.h"
 #include "sphere.h"
 
-#define PI 3.14159265
 
 namespace rt3 {
 
 void render(std::unique_ptr<Camera> & camera, std::unique_ptr<Scene> & scene) {
-
+  
   int wi = camera->film->m_initial_points[0];
 	int hi = camera->film->m_initial_points[1];
   
@@ -20,48 +19,24 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<Scene> & scene) {
   int w = camera->film->m_full_resolution[0];
 	int h = camera->film->m_full_resolution[1];
 
-/*
-  vector<std::shared_ptr<Primitive>> obj_list = {
-      std::shared_ptr<Primitive>(new Sphere(1, point3{0, 0, 0}))
-  };
-  // left is +x
-  // top is +z
-  // up is +y
-
- 
-  std::shared_ptr<Sphere>(new Sphere(0.4, point3{-1, 0.5, 5})),
-      std::shared_ptr<Sphere>(new Sphere(0.4, point3{1, -0.5, 8})),
-      std::shared_ptr<Sphere>(new Sphere(0.4, point3{-1, -1.5 , 3.5}))
-
-  vector<std::shared_ptr<Sphere>> obj_list;
-  for (int i = 0;i < 5; i++) 
-  {
-    for (int j = 0;j < 5; j++) 
-    {
-      obj_list.push_back(std::shared_ptr<Sphere>(new Sphere(10, point3{+ j * 50,-i * 50,- j * 50})));
-    }
-  }
-  */
-
   for (int i = hi;i < hf; i++) 
   {
     for (int j = wi;j < wf; j++) 
     {
+      int dw = camera->getNx() - w;
+      int dh = camera->getNy() - h;
+
       Spectrum color;
       bool intersects = false;
-      int i_ = (((float) i) / ((float) h)) * camera->getNx();
-      int j_ = (((float) j) / ((float) w)) * camera->getNy();
-      Ray ray = camera->generate_ray( i, j );
-
+      Ray ray = camera->generate_ray( j + dw/2, i + dh/2 );
+      
       // Checking if ray hit an object
       for (std::shared_ptr<Primitive> p : scene->obj_list) {
-        
         Surfel* sf = new Surfel(p.get());
         if (p->intersect(ray, sf)) {
           color = p->get_material()->sampleUV(sf->uv);
           intersects = true;
         }
-
       }
 
       // If the ray didnt hit any object, then sample from background
@@ -71,12 +46,6 @@ void render(std::unique_ptr<Camera> & camera, std::unique_ptr<Scene> & scene) {
         color = scene->background->sampleUV({u, v});
       }
 
-      /*
-      if (i % 100 == 0 && j % 100 == 0) {
-        std::cout << color << '\n';
-      }
-      */
-      
 
       camera->film->pixels.push_back(color);
 
@@ -182,7 +151,8 @@ void API::world_end() {
   curr_scene->background = make_background(render_opt->bkg_type, render_opt->bkg_ps) ;
   // Same with the film, that later on will belong to a camera object.
   std::unique_ptr<Camera> the_camera{ make_camera (render_opt->camera_type, render_opt->camera_ps) };
-  the_camera->film = make_film(render_opt->film_type, render_opt->film_ps) ;
+  the_camera->film = make_film(render_opt->film_type, render_opt->film_ps);
+  if (the_camera->get_res_from_film) {the_camera->setResFromFilm();}
 
   // Run only if we got film and background.
   if (the_camera and curr_scene->background) {
@@ -271,14 +241,12 @@ void API::object(const ParamSet& ps)
   VERIFY_WORLD_BLOCK("API::object");
   std::string type = retrieve(ps, "type", string{ "unknown" });
 
-  std::cout<<"\n\n Api \n\n";
   if(type == "sphere")
   {
-    Sphere* s = new Sphere(retrieve<real_type>(ps, "radius", 0), retrieve<Point3f>(ps, "position", Point3f{0,0,0}));
+    Sphere* s = new Sphere(retrieve<real_type>(ps, "radius", 0), retrieve<Point3f>(ps, "center", Point3f{0,0,0}));
     s->material = curr_material.get();
     curr_scene->obj_list.push_back(shared_ptr<Sphere>(s));
 
-    std::cout<<"\n\n sphere \n\n";
   }
   
 }

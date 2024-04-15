@@ -130,14 +130,14 @@ void parse_tags(tinyxml2::XMLElement* p_element, int level) {
       // List of parameters that might be defined inside the object's tag.
       vector<std::pair<param_type_e, string>> param_list{
         { param_type_e::STRING, "type" },
-        { param_type_e::POINT3F, "position" },
+        { param_type_e::POINT3F, "center" },
         { param_type_e::REAL, "radius" },
         { param_type_e::ARR_VEC3F, "vertices" },
         { param_type_e::ARR_INT, "triangles" },
       };
 
       parse_parameters(p_element, param_list, /* out */ &ps);
-      std::cout<<"\n\n PARSER \n\n";
+
       API::object(ps);
 
     } else if (tag_name == "material") {
@@ -150,6 +150,8 @@ void parse_tags(tinyxml2::XMLElement* p_element, int level) {
       };
 
       parse_parameters(p_element, param_list, /* out */ &ps);
+
+      API::material(ps);
     }
     else if (tag_name == "world_begin") {
       // std::clog << ">>> Entering WorldBegin, at level " << level+1 <<

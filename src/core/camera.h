@@ -19,14 +19,19 @@ protected:
 public:
 
 	Film* film;
+	bool get_res_from_film = false;
+
+	void setResFromFilm();
 
 	Camera(Point2i& vpdim, point3& frame_pos, vec3& look_from, vec3& look_at, vec3& vup,
-	 std::array<real_type, 4> screen_window, real_type frame_aspectratio);
+	 vector<real_type> screen_window, real_type frame_aspectratio, real_type fovy);
 
     virtual Ray generate_ray(int x, int y) = 0;
 
 	int getNx() {return nx;};
 	int getNy() {return ny;};
+	void setNx(int w) {nx = w;};
+	void setNy(int h) {ny = h;};
 
 };
 class PerspectiveCamera : public Camera {

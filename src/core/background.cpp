@@ -51,7 +51,7 @@ BackgroundColor* create_color_background(const ParamSet& ps) {
 
 		std::cout << tl << " " << tr << " " << bl << " " << br;
 
-		return new BackgroundColor({tl, tr, bl, br});
+		return new BackgroundColor({bl, tl, tr, br});
 	}
 }
 
