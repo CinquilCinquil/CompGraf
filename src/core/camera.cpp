@@ -75,7 +75,7 @@ Ray OrthographicCamera::generate_ray(int x, int y) {
     float u = uv[0];
     float v = uv[1];
 
-    return Ray(frame_pos + u*frame_vecs[0] + v*frame_vecs[1], frame_vecs[2]);
+    return Ray(frame_pos + u*frame_vecs[0] + v*frame_vecs[1], 1.0F*frame_vecs[2]);
 }
 
 Camera* create_camera(const ParamSet& ps) {
