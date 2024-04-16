@@ -8,54 +8,6 @@
 
 namespace rt3 {
 
-void render(std::unique_ptr<Camera> & camera, std::unique_ptr<Scene> & scene) {
-  
-  int wi = camera->film->m_initial_points[0];
-	int hi = camera->film->m_initial_points[1];
-  
-	int wf = camera->film->m_final_points[0];
-	int hf = camera->film->m_final_points[1];
-
-  int w = camera->film->m_full_resolution[0];
-	int h = camera->film->m_full_resolution[1];
-
-  for (int i = hi;i < hf; i++) 
-  {
-    for (int j = wi;j < wf; j++) 
-    {
-      int dw = camera->getNx() - w;
-      int dh = camera->getNy() - h;
-
-      Spectrum color;
-      bool intersects = false;
-      Ray ray = camera->generate_ray( j + dw/2, i + dh/2 );
-      
-      // Checking if ray hit an object
-      for (std::shared_ptr<Primitive> p : scene->obj_list) {
-        Surfel* sf = new Surfel(p.get());
-        if (p->intersect(ray, sf)) {
-          color = p->get_material()->sampleUV(sf->uv);
-          intersects = true;
-        }
-      }
-
-      // If the ray didnt hit any object, then sample from background
-      if (!intersects) {
-        float u = ((float) j) / w;
-        float v = ((float) i) / h;
-        color = scene->background->sampleUV({u, v});
-      }
-
-
-      camera->film->pixels.push_back(color);
-
-    }
-  }
-	
-	camera->film->write_image();
-  //delete sph;
-}
-
 //=== API's static members declaration and initialization.
 API::APIState API::curr_state = APIState::Uninitialized;
 RunningOptions API::curr_run_opt;
@@ -66,6 +18,15 @@ std::shared_ptr<Material> API::curr_material;
 
 // THESE FUNCTIONS ARE NEEDED ONLY IN THIS SOURCE FILE (NO HEADER NECESSARY)
 // ˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇ
+
+Integrator * API::make_integrator(const ParamSet& ps) {
+    std::cout << ">>> Inside API::make_integrator()\n";
+
+    Integrator* integrator{ nullptr };
+    integrator = create_integrator(ps);
+
+    return integrator;
+}
 
 Camera* API::make_camera(const std::string& name, const ParamSet& ps) {
   std::cout << ">>> Inside API::make_camera()\n";
@@ -146,21 +107,24 @@ void API::world_end() {
   // The scene has been properly set up and the scene has
   // already been parsed. It's time to render the scene.
 
+  std::unique_ptr<Integrator> the_integrator;
+
   // At this point, we have the background as a solitary pointer here.
   // In the future, the background will be parte of the scene object.
   curr_scene->background = make_background(render_opt->bkg_type, render_opt->bkg_ps) ;
   // Same with the film, that later on will belong to a camera object.
-  std::unique_ptr<Camera> the_camera{ make_camera (render_opt->camera_type, render_opt->camera_ps) };
-  the_camera->film = make_film(render_opt->film_type, render_opt->film_ps);
-  if (the_camera->get_res_from_film) {the_camera->setResFromFilm();}
+
+  the_integrator = make_integrator(make_camera (render_opt->camera_type, render_opt->camera_ps));
+  the_integrator->camera->film = make_film(render_opt->film_type, render_opt->film_ps);
+  if (the_integrator->camera->get_res_from_film) {the_integrator->camera->setResFromFilm();}
 
   // Run only if we got film and background.
-  if (the_camera and curr_scene->background) {
+  if (the_integrator->camera && curr_scene->background) {
     RT3_MESSAGE("    Parsing scene successfuly done!\n");
     RT3_MESSAGE("[2] Starting ray tracing progress.\n");
 
     // Structure biding, c++17.
-    auto res = the_camera->film->get_resolution();
+    auto res = the_integrator->camera->film->get_resolution();
     size_t w = res[0];
     size_t h = res[1];
     RT3_MESSAGE("    Image dimensions in pixels (W x H): " + std::to_string(w) + " x "
@@ -170,7 +134,7 @@ void API::world_end() {
     //================================================================================
     auto start = std::chrono::steady_clock::now();
 	
-    render(the_camera, curr_scene);  // TODO: This is the ray tracer's  main loop.
+    the_integrator->render(curr_scene);  // TODO: This is the ray tracer's  main loop.
 	
     auto end = std::chrono::steady_clock::now();
     //================================================================================
@@ -195,6 +159,17 @@ void API::reset_engine() {
   // This will delete all information on integrator, cameras, filters,
   // acceleration structures, etc., that has been set previously.
   render_opt = std::make_unique<RenderOptions>();
+}
+
+void API::integrator(const ParamSet& ps) {
+
+  std::cout << ">>> Inside API::integrator()\n";
+  VERIFY_SETUP_BLOCK("API::integrator");
+  std::string type = retrieve(ps, "type", string{ "unknown" });
+
+  render_opt->integrator_ps = ps;
+  render_opt->integrator_type = type;
+
 }
 
 void API::background(const ParamSet& ps) {

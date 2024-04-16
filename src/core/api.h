@@ -48,6 +48,9 @@ struct RenderOptions {
   /// the Bakcground
   string bkg_type{"solid"}; // "image", "interpolated"
   ParamSet bkg_ps;
+
+  string integrator_type{"flat"};
+  ParamSet integrator_ps;
 };
 
 /// Collection of data related to a Graphics state, such as current material,
@@ -100,6 +103,7 @@ public:
   static void clean_up();
   static void reset_engine();
 
+  static void integrator(const ParamSet& ps)
   static void film(const ParamSet &ps);
   static void camera(const ParamSet &ps);
   static void background(const ParamSet &ps);

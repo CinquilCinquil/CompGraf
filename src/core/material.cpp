@@ -41,5 +41,9 @@ namespace rt3 {
         return m;
     
     }
+
+    [[nodiscard]] Spectrum Material::sampleUV(const Point2f& pixel_ndc) const {
+        return samplingMethod(pixel_ndc);
+    }
     
 };

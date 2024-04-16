@@ -10,15 +10,15 @@ namespace rt3 {
 class Material {
 
 public:
-    Spectrum color = {255, 0, 0};
 
     std::function <Spectrum(const Point2f& pixel_ndc)> samplingMethod;
 
-    [[nodiscard]] virtual Spectrum sampleUV(const Point2f& pixel_ndc) const { return samplingMethod(pixel_ndc); };
+    [[nodiscard]] virtual Spectrum sampleUV(const Point2f& pixel_ndc) const;
 
 };
 
 Material* create_material(const ParamSet& ps);
+
 }
 
 #endif

@@ -153,6 +153,16 @@ void parse_tags(tinyxml2::XMLElement* p_element, int level) {
 
       API::material(ps);
     }
+    else if (tag_name == "integrator") {
+      ParamSet ps;
+      vector<std::pair<param_type_e, string>> param_list{
+        { param_type_e::STRING, "type" },
+      };
+
+      parse_parameters(p_element, param_list, /* out */ &ps);
+
+      API::integrator(ps);
+    }
     else if (tag_name == "world_begin") {
       // std::clog << ">>> Entering WorldBegin, at level " << level+1 <<
       // std::endl;
