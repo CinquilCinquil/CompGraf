@@ -1,27 +1,27 @@
-#include "integrator.h"
+#include "api.h"
 
 namespace rt3 {
 
-SamplerIntegrator::SamplerIntegrator( std::shared_ptr<const Camera> cam ) : camera{cam} {};
+Integrator::Integrator(std::shared_ptr<Camera> cam) : camera{cam} {}
 
-Spectrum FlatIntegrator::Li( const Ray& ray, const Scene& scene ) const {
+Spectrum FlatIntegrator::Li(const Ray& ray, Scene * scene) const {
 
     // Find closest ray intersection or return background radiance.
     Surfel isect; // Intersection information.
-    if (!scene.intersect(ray, &isect)) {
-        return {}; // empty object.
+    if (!(scene->intersect(ray, &isect))) {
+        return Spectrum{-1, -1, -1}; // empty object.
     }
     // Some form of determining the incoming radiance at the ray's origin.
     // Polymorphism in action.
-    Material *m = dynamic_cast< FlatMaterial *>( iscet.primitive->get_material() );
+    const Material *m = isect.primitive->get_material();
 
     // Assign diffuse color to L.
-    return m->color;
+    return m->sampleUV(isect.uv);
 
 }
 
-void FlatIntegrator::render( const Scene& scene ) {
-  
+void FlatIntegrator::render(Scene * scene) {
+
     int wi = camera->film->m_initial_points[0];
 	int hi = camera->film->m_initial_points[1];
   
@@ -39,31 +39,18 @@ void FlatIntegrator::render( const Scene& scene ) {
         int dh = camera->getNy() - h;
 
         Spectrum color;
-        bool intersects = false;
         Ray ray = camera->generate_ray( j + dw/2, i + dh/2 );
-        
 
-        // TODO: chamar o LI, e dentro do LI fazer o loop com os objs
-
-        // Checking if ray hit an object
-        for (std::shared_ptr<Primitive> p : scene->obj_list) {
-            Surfel* sf = new Surfel(p.get());
-            if (p->intersect(ray, sf)) {
-                color = p->get_material()->sampleUV(sf->uv);
-                intersects = true;
-            }
-        }
+        color = Li(ray, scene);
 
         // If the ray didnt hit any object, then sample from background
-        if (!intersects) {
+        if (color[0] < 0) {
             float u = ((float) j) / w;
             float v = ((float) i) / h;
             color = scene->background->sampleUV({u, v});
         }
 
-
         camera->film->pixels.push_back(color);
-
     }
     }
 	

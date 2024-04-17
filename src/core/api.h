@@ -5,6 +5,7 @@
 
 #include "rt3-base.h"
 #include "scene.h"
+#include "integrator.h"
 
 //=== API Macro definitions
 
@@ -92,6 +93,7 @@ private:
   
   // === Helper functions.
   ///
+  static Integrator *make_integrator(const ParamSet& ps);
   static Film *make_film(const string &name, const ParamSet &ps);
   static BackgroundColor *make_background(const string &name, const ParamSet &ps);
   static Camera *make_camera(const string &name, const ParamSet &ps);
@@ -103,7 +105,7 @@ public:
   static void clean_up();
   static void reset_engine();
 
-  static void integrator(const ParamSet& ps)
+  static void integrator(const ParamSet& ps);
   static void film(const ParamSet &ps);
   static void camera(const ParamSet &ps);
   static void background(const ParamSet &ps);

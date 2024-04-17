@@ -5,7 +5,6 @@
 #include "material.h"
 #include "sphere.h"
 
-
 namespace rt3 {
 
 //=== API's static members declaration and initialization.
@@ -107,15 +106,12 @@ void API::world_end() {
   // The scene has been properly set up and the scene has
   // already been parsed. It's time to render the scene.
 
-  std::unique_ptr<Integrator> the_integrator;
+  std::unique_ptr<Integrator> the_integrator = std::unique_ptr<Integrator>(make_integrator(render_opt->integrator_ps));
 
-  // At this point, we have the background as a solitary pointer here.
-  // In the future, the background will be parte of the scene object.
   curr_scene->background = make_background(render_opt->bkg_type, render_opt->bkg_ps) ;
-  // Same with the film, that later on will belong to a camera object.
-
-  the_integrator = make_integrator(make_camera (render_opt->camera_type, render_opt->camera_ps));
+  the_integrator->camera = std::shared_ptr<Camera>(make_camera(render_opt->camera_type, render_opt->camera_ps));
   the_integrator->camera->film = make_film(render_opt->film_type, render_opt->film_ps);
+
   if (the_integrator->camera->get_res_from_film) {the_integrator->camera->setResFromFilm();}
 
   // Run only if we got film and background.
@@ -134,7 +130,7 @@ void API::world_end() {
     //================================================================================
     auto start = std::chrono::steady_clock::now();
 	
-    the_integrator->render(curr_scene);  // TODO: This is the ray tracer's  main loop.
+    the_integrator->render(curr_scene.get());
 	
     auto end = std::chrono::steady_clock::now();
     //================================================================================

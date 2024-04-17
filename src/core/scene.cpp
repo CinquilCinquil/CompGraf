@@ -17,7 +17,24 @@ namespace rt3 {
     }
 
     /// Determines the intersection info; return true if there is an intersection.
-    bool Scene::intersect( const Ray& r, Surfel *isect ) const { return this->aggregate->intersect(r, isect); }
+    bool Scene::intersect( const Ray& ray, Surfel *isect ) const {
+        
+        bool intersects = false;
+
+        // Checking if ray hit an object
+        for (std::shared_ptr<Primitive> p : obj_list) {
+            isect->primitive = p.get();
+            if (p->intersect(ray, isect)) {
+                intersects = true;
+            }
+        }
+
+        return intersects;
+
+
+        //return this->aggregate->intersect(r, isect); //OLD
+    }
+
     /*! A faster version that only determines whether there is an intersection or not;
         * it doesn't calculate the intersection info.
         */

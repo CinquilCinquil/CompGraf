@@ -34,6 +34,7 @@ class Surfel {
             {};
 
 		Surfel(const Primitive *pri ) : primitive{pri} {};
+		Surfel() = default;
 
 		point3 p;     //!< Contact point.
 		vec3 n;       //!< The surface normal.
